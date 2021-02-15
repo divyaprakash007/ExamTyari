@@ -34,7 +34,7 @@
         android:layout_marginRight="16dp"
         android:hint="Enter Mobile Number"
         app:hintEnabled="true"
-        app:hintTextColor="@color/white"
+        app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -42,14 +42,16 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/mobile_et"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="phone"
+            android:paddingTop="8dp"
+            android:padding="8dp"
             android:maxLines="1"
             android:maxLength="10"
             android:digits="0123456789"
             android:gravity="center"
-            android:background="@color/transparent_bg"
-            android:textColor="@color/white" />
+            android:background="@color/white"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -61,7 +63,7 @@
         android:digits="0123456789"
         app:hintEnabled="true"
         android:enabled="false"
-        app:hintTextColor="@color/white"
+        app:hintTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/mobile_til"
         app:layout_constraintStart_toStartOf="@+id/mobile_til"
         app:layout_constraintTop_toBottomOf="@+id/mobile_til">
@@ -69,13 +71,16 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/otp_et"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="number"
             android:maxLines="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:maxLength="6"
+            android:digits="0123456789"
             android:gravity="center"
-            android:background="@color/transparent_bg"
-            android:textColor="@color/white" />
+            android:background="@color/white"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

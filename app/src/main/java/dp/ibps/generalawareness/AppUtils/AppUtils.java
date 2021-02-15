@@ -49,22 +49,6 @@ public class AppUtils {
 
     }
 
-    public static boolean checkVersionUpdate(String currentVersion){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        boolean updateVersion = false;
-        db.collection("metaData").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        });
-        return false;
-
-    }
 
 }
