@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradiant_bg"
+    tools:context=".Activity.LoginActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:fontFamily="cursive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.31" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mobile_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:hint="Enter Mobile Number"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/mobile_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:maxLength="10"
+            android:digits="0123456789"
+            android:gravity="center"
+            android:background="@color/transparent_bg"
+            android:textColor="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/otp_til"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="6-digit OTP"
+        android:digits="0123456789"
+        app:hintEnabled="true"
+        android:enabled="false"
+        app:hintTextColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/mobile_til"
+        app:layout_constraintStart_toStartOf="@+id/mobile_til"
+        app:layout_constraintTop_toBottomOf="@+id/mobile_til">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/otp_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLines="1"
+            android:maxLength="6"
+            android:gravity="center"
+            android:background="@color/transparent_bg"
+            android:textColor="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/otp_login_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="#4000BCD4"
+        android:text="Send OTP"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/otp_til"
+        app:layout_constraintStart_toStartOf="@+id/otp_til"
+        app:layout_constraintTop_toBottomOf="@+id/otp_til" />
+
+    <TextView
+        android:id="@+id/privacy_policy_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Privacy Policy"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/otp_login_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/otp_login_button"
+        app:layout_constraintTop_toBottomOf="@+id/otp_login_button"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/about_us_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="About Us"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/privacy_policy_tv"
+        app:layout_constraintEnd_toStartOf="@+id/privacy_policy_tv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/otp_login_button"
+        app:layout_constraintTop_toTopOf="@+id/privacy_policy_tv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

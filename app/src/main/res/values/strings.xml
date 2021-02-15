@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ExamTyari</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="about_us">About Us</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="share_app">Share App</string>
+    <string name="night_mode">Night Mode</string>
+    <string name="version_code">Version Code</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="feed_back">Feed Back</string>
+    <string name="guest_user">Guest User</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">एग्जामतैयारी</string>
+    <string name="update_profile">प्रोफ़ाइल अपडेट</string>
+    <string name="about_us">हमारे बारे में</string>
+    <string name="rate_us">रेटिंग दें</string>
+    <string name="share_app">ऐप शेयर करें</string>
+    <string name="night_mode">नाईट मोड</string>
+    <string name="version_code">वर्जन कोड</string>
+    <string name="privacy_policy">प्राइवेसी पालिसी</string>
+    <string name="feed_back">फीड बैक</string>
+    <string name="guest_user">गेस्ट यूजर</string>
+    <string name="mobile_number">मोबाइल नंबर</string>
+    <string name="open">ओपन</string>
+    <string name="close">क्लोज</string>
+</resources>
