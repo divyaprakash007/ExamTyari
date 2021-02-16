@@ -55,13 +55,13 @@ public class SplashScreen extends AppCompatActivity {
 
         taglineTV.setText(taglines[AppUtils.getRandomNumber(0, taglines.length - 1)]);
 
-//        if (AppPrefs.getPin(this).equals("")) {
-//            intent = new Intent(SplashScreen.this, UpdateProfileActivity.class);
-//        } else {
-//            intent = new Intent(SplashScreen.this, HomeActivity.class);
-//        }
+        if (AppPrefs.getMobile(this).equals("")) {
+            intent = new Intent(SplashScreen.this, LoginActivity.class);
+        } else {
+            intent = new Intent(SplashScreen.this, HomeActivity.class);
+        }
 
-        intent = new Intent(SplashScreen.this, HomeActivity.class);
+//        intent = new Intent(SplashScreen.this, HomeActivity.class);
         new CountDownTimer(3000, 100) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -77,6 +77,6 @@ public class SplashScreen extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        
+
     }
 }
