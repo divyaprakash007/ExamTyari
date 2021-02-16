@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,6 +35,7 @@ import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCall
 
 import java.util.concurrent.TimeUnit;
 
+import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.AppUtils.AppPrefs;
 import dp.ibps.generalawareness.R;
 
@@ -48,7 +50,10 @@ public class LoginActivity extends AppCompatActivity {
     private PhoneAuthCredential credential;
     private String verificationId;
     private static final String KEY_VERIFICATION_ID = "key_verification_id";
-    private GoogleApiClient googleApiClient;
+    private TextView skipTV;
+    private int loginAttempt = 0;
+    // TODO: 16-02-2021 if Login attempt is 3 then also show the Skip Login Button enable to users and switch to Home Screen with some default values in Profile.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         otp_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                controlAllButtons();
                 if (mobile_number.equalsIgnoreCase("")) {
                     if (mobile_et.getText().toString().length() < 10 || !android.util.Patterns.PHONE.matcher(mobile_et.getText().toString()).matches()) {
                         Toast.makeText(LoginActivity.this, "Please enter a valid mobile number.", Toast.LENGTH_LONG).show();
@@ -67,11 +73,10 @@ public class LoginActivity extends AppCompatActivity {
                         otp_til.setEnabled(false);
                     } else {
                         mobile_number = mobile_et.getText().toString();
+                        sendOtpToMobile("+91"+mobile_number);
                         otp_login_button.setText("Verify & Login");
                         mobile_til.setEnabled(false);
                         otp_til.setEnabled(true);
-                        // TODO: 14-02-2021 send otp to user using firebase.
-                        sendOtpToMobile("+91"+mobile_number);
                     }
                 } else {
                     if (otp_number.equalsIgnoreCase("")) {
@@ -114,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this,UpdateProfileActivity.class));
                     finish();
                 } else {
+                    // TODO: 16-02-2021 clear all the variables to its initial state and reload the screen
                     Toast.makeText(LoginActivity.this, "Verification Failed.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -135,12 +141,15 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onVerificationFailed(@NonNull FirebaseException e) {
-                                Toast.makeText(LoginActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d("TAG", "onVerificationFailed: " + e.getMessage());
+                                // TODO: 16-02-2021 clear all variables values and reload the whole activity
                             }
 
                             @Override
                             public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                                 verificationId = s;
+                                Toast.makeText(LoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                             }
                         })          // OnVerificationStateChangedCallbacks
                         .build();
@@ -156,8 +165,46 @@ public class LoginActivity extends AppCompatActivity {
         otp_login_button = findViewById(R.id.otp_login_button);
         privacy_policy_tv = findViewById(R.id.privacy_policy_tv);
         about_us_tv = findViewById(R.id.about_us_tv);
+        skipTV = findViewById(R.id.skipTV);
+
         mAuth = FirebaseAuth.getInstance();
         // TODO: 15-02-2021 Need to implement Recaptcha API To handle Mobile login for non-Playservices devices.
+        about_us_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controlAllButtons();
+                Intent intent = new Intent(LoginActivity.this,WebViewActivity.class);
+                intent.putExtra(AppConstant.webIntentKey,0);
+                startActivity(intent);
+
+            }
+        });
+
+        privacy_policy_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controlAllButtons();
+                Intent intent = new Intent(LoginActivity.this,WebViewActivity.class);
+                intent.putExtra(AppConstant.webIntentKey,1);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    private void controlAllButtons() {
+        otp_login_button.setClickable(false);
+        privacy_policy_tv.setClickable(false);
+        about_us_tv.setClickable(false);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                otp_login_button.setClickable(true);
+                privacy_policy_tv.setClickable(true);
+                about_us_tv.setClickable(true);
+            }
+        },1000);
+
     }
 
     @Override

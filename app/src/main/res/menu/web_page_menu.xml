@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/refresh_webView"
+        android:title="Refresh"
+        android:icon="@drawable/ic_baseline_refresh_24"
+        app:showAsAction="always"/>
+    <item android:id="@+id/share_app_webView"
+        android:title="Share Link" />
+    <item android:id="@+id/rate_us_webView"
+        android:title="Rate_us" />
+
+
+</menu>

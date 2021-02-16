@@ -26,7 +26,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/white"
-        android:drawableRight="@drawable/ic_baseline_arrow_forward_24"
+        android:drawableRight="@drawable/ic_forward_arrow"
         android:backgroundTint="@color/gradient_start_color"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
