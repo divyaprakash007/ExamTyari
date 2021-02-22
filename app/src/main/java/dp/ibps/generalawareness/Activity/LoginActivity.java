@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 
 import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.AppUtils.AppPrefs;
+import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -45,13 +48,14 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText mobile_et, otp_et;
     private Button otp_login_button;
     private TextView privacy_policy_tv, about_us_tv;
-    private String mobile_number = "";
+    private String mobileNumber = "";
     private String otp_number = "";
     private PhoneAuthCredential credential;
     private String verificationId;
     private static final String KEY_VERIFICATION_ID = "key_verification_id";
     private TextView skipTV;
     private int loginAttempt = 0;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +64,50 @@ public class LoginActivity extends AppCompatActivity {
 
         initialise();
 
+        mobile_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() >= 10) {
+                    AppUtils.hideKeyboard(LoginActivity.this);
+                }
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        otp_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() >= 6) {
+                    AppUtils.hideKeyboard(LoginActivity.this);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         otp_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 controlAllButtons();
+                progressDialog.show();
                 if (otp_login_button.getText().toString().equals("Send OTP")) {
                     if (mobile_et.getText().toString().length() != 10) {
                         Toast.makeText(LoginActivity.this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
@@ -114,6 +158,9 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 Log.d("TAG", "onVerificationFailed: " + e.getMessage());
                                 resetActivity();
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                }
                             }
 
                             @Override
@@ -123,8 +170,11 @@ public class LoginActivity extends AppCompatActivity {
                                 otp_til.setEnabled(true);
                                 verificationId = s;
                                 Toast.makeText(LoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-
+                                mobileNumber = mobile_number;
                                 loginAttempt++;
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                }
 
                             }
                         })          // OnVerificationStateChangedCallbacks
@@ -159,12 +209,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    AppPrefs.setMobile(LoginActivity.this,mobile_number);
+                    AppPrefs.setMobile(LoginActivity.this, mobileNumber);
                     startActivity(new Intent(LoginActivity.this, UpdateProfileActivity.class));
                     finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Verification Failed.", Toast.LENGTH_SHORT).show();
                     resetActivity();
+                }
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
                 }
             }
         });
@@ -180,23 +233,31 @@ public class LoginActivity extends AppCompatActivity {
         privacy_policy_tv = findViewById(R.id.privacy_policy_tv);
         about_us_tv = findViewById(R.id.about_us_tv);
         skipTV = findViewById(R.id.skipTV);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Processing...");
+        progressDialog.setMessage("Please wait.");
+        progressDialog.setCancelable(false);
 
         skipTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                progressDialog.dismiss();
                 finish();
             }
         });
 
         mAuth = FirebaseAuth.getInstance();
-        // TODO: 15-02-2021 Need to implement Recaptcha API To handle Mobile login for non-Playservices devices.
+
         about_us_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 controlAllButtons();
+                progressDialog.show();
                 Intent intent = new Intent(LoginActivity.this, WebViewActivity.class);
                 intent.putExtra(AppConstant.webIntentKey, 0);
+                progressDialog.dismiss();
                 startActivity(intent);
             }
         });
@@ -205,8 +266,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 controlAllButtons();
+                progressDialog.show();
                 Intent intent = new Intent(LoginActivity.this, WebViewActivity.class);
                 intent.putExtra(AppConstant.webIntentKey, 1);
+                progressDialog.dismiss();
                 startActivity(intent);
             }
         });

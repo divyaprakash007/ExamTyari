@@ -20,18 +20,14 @@
             android:name=".Activity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Activity.UpdateProfileActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.WebViewActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
 
 
         </activity>
@@ -45,7 +41,15 @@
         <activity
             android:name=".Activity.SplashScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"></activity>
+            android:theme="@style/SplashTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

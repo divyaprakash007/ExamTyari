@@ -41,24 +41,24 @@ public class NoInternetConnection extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                CountDownTimer countDownTimer = new CountDownTimer(6000,2000){
+                CountDownTimer countDownTimer = new CountDownTimer(6000, 2000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        internet_status_img.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_internet));
-                        if (AppUtils.isNetworkAvailable(NoInternetConnection.this)){
+                        if (AppUtils.isNetworkAvailable(NoInternetConnection.this)) {
                             internet_status_img.setImageDrawable(getResources().getDrawable(R.drawable.ic_internet_available));
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (progressDialog.isShowing()){
+                                    if (progressDialog.isShowing()) {
                                         progressDialog.dismiss();
                                     }
                                     finish();
                                 }
-                            },500);
+                            }, 500);
 
                         } else {
-                            if (!progressDialog.isShowing()){
+                            if (!progressDialog.isShowing()) {
+                                internet_status_img.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_internet));
                                 progressDialog.show();
                             }
                         }
@@ -66,7 +66,8 @@ public class NoInternetConnection extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
-                        if (progressDialog.isShowing()){
+                        if (progressDialog.isShowing()) {
+                            internet_status_img.setImageDrawable(getResources().getDrawable(R.drawable.ic_no_internet));
                             progressDialog.dismiss();
                         }
                     }
@@ -86,10 +87,6 @@ public class NoInternetConnection extends AppCompatActivity {
         progressDialog.setTitle("Connecting...");
         progressDialog.setMessage("Please wait.");
         progressDialog.setCancelable(false);
-
-
-
-
 
 
     }

@@ -1,5 +1,6 @@
 package dp.ibps.generalawareness.AppUtils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -9,10 +10,10 @@ public class AppPrefs {
     private static SharedPreferences.Editor mPrefsEditor;
 
 
-//    User Profile methods User Name, Mobile Number, Pin Code
+    //    User Profile methods User Name, Mobile Number, Pin Code
     public static String getUserName(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString("userName", "");
+        return mPrefs.getString("userName", "Guest User");
     }
 
     public static void setUserName(Context ctx, String userName) {

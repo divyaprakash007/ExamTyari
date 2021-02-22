@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.AppUtils.AppPrefs;
 import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.Fragments.HomeFragment;
@@ -37,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_View);
         drawerLayout = findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -47,12 +48,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.update:
-                        // TODO: 13-02-2021 switch to update user profile screen.
+                        startActivity(new Intent(HomeActivity.this, UpdateProfileActivity.class));
                         break;
                     case R.id.about_us:
-                        // TODO: 13-02-2021 Open html local file in WebView 
+                        Intent intent_abousUs = new Intent(HomeActivity.this, WebViewActivity.class);
+                        intent_abousUs.putExtra(AppConstant.webIntentKey, 0);
+                        startActivity(intent_abousUs);
                         break;
                     case R.id.share_app:
 //                        Share app link using default apps
@@ -66,7 +69,9 @@ public class HomeActivity extends AppCompatActivity {
                         // TODO: 13-02-2021 switch to feedback screen and store user's feedback with date mobile number and proper message. 
                         break;
                     case R.id.privacy_policy:
-                        // TODO: 13-02-2021 Open html local file in WebView 
+                        Intent intent_privacyPolicy = new Intent(HomeActivity.this, WebViewActivity.class);
+                        intent_privacyPolicy.putExtra(AppConstant.webIntentKey, 1);
+                        startActivity(intent_privacyPolicy);
                         break;
                     case R.id.version_code:
                         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
@@ -77,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
                                 dialog.dismiss();
                             }
                         }).show();
-                    break;
+                        break;
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
@@ -88,22 +93,22 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.context_menu,menu);
+        getMenuInflater().inflate(R.menu.context_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.notifications:
-                startActivity(new Intent(HomeActivity.this,NotificationsActivity.class));
+                startActivity(new Intent(HomeActivity.this, NotificationsActivity.class));
                 break;
             case R.id.check_update:
                 // TODO: 15-02-2021 Check for play store version update fetched from Firebase 
                 break;
             case R.id.settings:
-                startActivity(new Intent(HomeActivity.this,SettingsActivity.class));
+                startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

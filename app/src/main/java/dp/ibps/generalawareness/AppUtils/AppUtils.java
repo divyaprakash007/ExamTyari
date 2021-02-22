@@ -1,10 +1,13 @@
 package dp.ibps.generalawareness.AppUtils;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 
@@ -18,6 +21,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.Random;
 
 public class AppUtils {
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -38,17 +52,22 @@ public class AppUtils {
         }
     }
 
-    public static void shareAppLink(Context context){
+    public static void shareAppLink(Context context) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         String shareMessage = "Download this Application for Free Mock Tests https://play.google.com/store/apps/details?id=dp.ibps.generalawareness&hl=en";
         String shareSubject = "ExamTyari App";
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT,shareSubject);
-        shareIntent.putExtra(Intent.EXTRA_TEXT,shareMessage);
-        context.startActivity(Intent.createChooser(shareIntent,"Share Using"));
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+        context.startActivity(Intent.createChooser(shareIntent, "Share Using"));
 
     }
 
+    public static void logoutUser(Context context) {
+        AppPrefs.setUserName(context, "");
+        AppPrefs.setMobile(context, "");
+        AppPrefs.setPin(context, "");
+    }
 
 
 }
