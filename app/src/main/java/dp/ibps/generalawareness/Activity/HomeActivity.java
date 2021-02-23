@@ -11,24 +11,40 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.AppUtils.AppPrefs;
 import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.Fragments.HomeFragment;
 import dp.ibps.generalawareness.R;
+import okhttp3.internal.Version;
 
 public class HomeActivity extends AppCompatActivity {
-    NavigationView navigationView;
-    ActionBarDrawerToggle toggle;
-    DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
+    private DrawerLayout drawerLayout;
+    private boolean isBackPressed = false;
+    // TODO: 23-02-2021 Quiz Screen Layout Design
+    // TODO: 23-02-2021 mock test screen layout design
+    // TODO: 23-02-2021 6 Newspapers Open in WebView
+    // TODO: 23-02-2021 Open NCERT Pdf books
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +57,6 @@ public class HomeActivity extends AppCompatActivity {
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-//        getSupportFragmentManager().beginTransaction().add(R.id.nav_View,HomeFragment.newInstance(),null).commit();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -58,15 +72,13 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(intent_abousUs);
                         break;
                     case R.id.share_app:
-//                        Share app link using default apps
                         AppUtils.shareAppLink(HomeActivity.this);
                         break;
                     case R.id.rate_us:
-                        // Switch user to PlayStore (Chrome, App)
                         AppUtils.rateUs(HomeActivity.this);
                         break;
                     case R.id.feedback:
-                        // TODO: 13-02-2021 switch to feedback screen and store user's feedback with date mobile number and proper message. 
+                        startActivity(new Intent(HomeActivity.this, FeedBackActivity.class));
                         break;
                     case R.id.privacy_policy:
                         Intent intent_privacyPolicy = new Intent(HomeActivity.this, WebViewActivity.class);
@@ -88,6 +100,16 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+        try {
+            AppUtils.checkVersionUpdate(HomeActivity.this, false);
+        } catch (Exception e) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    AppUtils.checkVersionUpdate(HomeActivity.this, false);
+                }
+            }, 60000);
+        }
 
     }
 
@@ -105,7 +127,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, NotificationsActivity.class));
                 break;
             case R.id.check_update:
-                // TODO: 15-02-2021 Check for play store version update fetched from Firebase 
+                AppUtils.checkVersionUpdate(HomeActivity.this, true);
                 break;
             case R.id.settings:
                 startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
@@ -114,5 +136,18 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (isBackPressed) {
+            finish();
+        }
+        isBackPressed = true;
+        Toast.makeText(this, "Please press again to Exit.", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isBackPressed = false;
+            }
+        }, 2000);
+    }
 }

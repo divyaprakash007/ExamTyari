@@ -47,6 +47,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: Exception " + " Mobile " + AppPrefs.getMobile(this));
         }
 
+        // TODO: 23-02-2021 Update User Profile to server also save user details in Prefs.
+
     }
 
     private void updateProfileDB() {

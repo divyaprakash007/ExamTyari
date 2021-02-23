@@ -9,28 +9,24 @@
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.ExamTyari">
+        <activity android:name=".Activity.MockTestResultActivity"></activity>
+        <activity android:name=".Activity.MockTestActivity" />
+        <activity android:name=".Activity.FeedBackActivity" />
         <activity
             android:name=".Activity.NoInternetConnection"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity android:name=".Activity.NotificationsActivity" />
         <activity android:name=".Activity.SettingsActivity" />
         <activity
             android:name=".Activity.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.UpdateProfileActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.WebViewActivity"
-            android:screenOrientation="portrait">
-
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.HomeActivity"
             android:screenOrientation="portrait"
@@ -42,20 +38,17 @@
             android:name=".Activity.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 </manifest>

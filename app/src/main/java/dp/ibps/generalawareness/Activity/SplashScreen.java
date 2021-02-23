@@ -77,8 +77,6 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.d("TAG", "onStart: Unique User name " + AppPrefs.getUserName(this));
         if (!AppUtils.isNetworkAvailable(SplashScreen.this)) {
             intent = new Intent(SplashScreen.this, NoInternetConnection.class);
         } else if (AppPrefs.getMobile(this).equals("")) {
@@ -91,6 +89,7 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(intent);
+                finish();
             }
         }, 2500);
 
