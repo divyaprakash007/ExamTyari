@@ -37,6 +37,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        // TODO: 25-02-2021 set full screen activity 
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -69,7 +70,7 @@ public class SplashScreen extends AppCompatActivity {
             });
 
         } catch (Exception e) {
-            Toast.makeText(SplashScreen.this, "Session Logout.", Toast.LENGTH_SHORT).show();
+
         }
 
     }
@@ -92,7 +93,6 @@ public class SplashScreen extends AppCompatActivity {
                 finish();
             }
         }, 2500);
-
     }
 
     @Override

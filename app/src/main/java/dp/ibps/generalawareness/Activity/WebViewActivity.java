@@ -26,7 +26,7 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_view);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initialise();
-        switch (getIntent().getExtras().getInt(AppConstant.webIntentKey)){
+        switch (getIntent().getExtras().getInt(AppConstant.webIntentKey)) {
             case 0:
                 url = "file:///android_asset/about_us.html";
                 pageTitle = "About Us";
@@ -57,6 +57,11 @@ public class WebViewActivity extends AppCompatActivity {
                 break;
         }
         getSupportActionBar().setTitle(pageTitle);
+        if (AppUtils.isNetworkAvailable(WebViewActivity.this)) {
+            webView.loadUrl(url);
+        } else {
+            startActivity(new Intent(WebViewActivity.this, NoInternetConnection.class));
+        }
     }
 
     private void initialise() {
@@ -73,17 +78,6 @@ public class WebViewActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
             return true;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (AppUtils.isNetworkAvailable(WebViewActivity.this)) {
-            webView.loadUrl(url);
-
-        } else {
-            startActivity(new Intent(WebViewActivity.this,NoInternetConnection.class));
         }
     }
 

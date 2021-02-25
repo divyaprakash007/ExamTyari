@@ -15,6 +15,109 @@
         android:elevation="1dp"
         app:cardCornerRadius="56sp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:enabled="false"
+                android:hint="Registered Mobile number">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_mobile_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:digits="0123456789"
+                    android:textColor="@color/gradient_end_color"
+                    android:textSize="18sp"
+                    android:text="+91 7983629622"
+                    android:gravity="center"
+                    android:clickable="false"
+                    android:singleLine="true"
+                    android:maxLength="13"
+                    android:maxEms="1"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Enter full name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:textColor="@color/gradient_end_color"
+                    android:textSize="18sp"
+                    android:singleLine="true"
+                    android:maxLength="32"
+                    android:maxEms="1"/>
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Enter area PIN code">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_pin_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:digits="0123456789"
+                    android:inputType="phone"
+                    android:textColor="@color/gradient_end_color"
+                    android:textSize="18sp"
+                    android:singleLine="true"
+                    android:maxLength="6"
+                    android:maxEms="1"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Date of Birth">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/date_of_birth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:digits="0123456789"
+                    android:enabled="true"
+                    android:textColor="@color/gradient_end_color"
+                    android:textSize="18sp"
+                    android:singleLine="true"
+                    android:maxLength="6"
+                    android:maxEms="1"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/update_profile_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Update and Continue"
+                android:textAllCaps="false"
+                android:background="#00FF00"/>
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

@@ -23,10 +23,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.AppUtils.AppPrefs;
@@ -40,11 +50,13 @@ public class HomeActivity extends AppCompatActivity {
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
     private boolean isBackPressed = false;
+    private FirebaseFirestore fb;
     // TODO: 23-02-2021 Quiz Screen Layout Design
     // TODO: 23-02-2021 mock test screen layout design
     // TODO: 23-02-2021 6 Newspapers Open in WebView
     // TODO: 23-02-2021 Open NCERT Pdf books
-
+    // TODO: 25-02-2021 check if user has not used app from last 7 days
+    // TODO: 25-02-2021 fetch news on Air rss and also update firebase db onSuccess or if Internet is connected then get AIR Urls from fb db
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +64,9 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.homeToolbar);
         setSupportActionBar(toolbar);
+        initialise();
+        lastUsingDate();
+
         navigationView = findViewById(R.id.nav_View);
         drawerLayout = findViewById(R.id.drawer);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -61,15 +76,14 @@ public class HomeActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 switch (item.getItemId()) {
                     case R.id.update:
                         startActivity(new Intent(HomeActivity.this, UpdateProfileActivity.class));
                         break;
                     case R.id.about_us:
-                        Intent intent_abousUs = new Intent(HomeActivity.this, WebViewActivity.class);
-                        intent_abousUs.putExtra(AppConstant.webIntentKey, 0);
-                        startActivity(intent_abousUs);
+                        Intent intent_aboutUs = new Intent(HomeActivity.this, WebViewActivity.class);
+                        intent_aboutUs.putExtra(AppConstant.webIntentKey, 0);
+                        startActivity(intent_aboutUs);
                         break;
                     case R.id.share_app:
                         AppUtils.shareAppLink(HomeActivity.this);
@@ -96,7 +110,6 @@ public class HomeActivity extends AppCompatActivity {
                         }).show();
                         break;
                 }
-                drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
@@ -109,6 +122,29 @@ public class HomeActivity extends AppCompatActivity {
                     AppUtils.checkVersionUpdate(HomeActivity.this, false);
                 }
             }, 60000);
+        }
+
+    }
+
+    private void initialise() {
+        fb = FirebaseFirestore.getInstance();
+
+
+    }
+
+    private void lastUsingDate() {
+        try {
+            DocumentReference documentReference = fb.collection("userData").document(AppPrefs.getMobile(this));
+            Map<String, Object> user = new HashMap<>();
+            user.put("lastUsedDate", "" + AppUtils.getTodayDate());
+            documentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(this, "Please login to enjoy more features in App.", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -134,6 +170,12 @@ public class HomeActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override

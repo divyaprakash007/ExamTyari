@@ -26,12 +26,23 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import dp.ibps.generalawareness.Activity.HomeActivity;
 import dp.ibps.generalawareness.R;
 
 public class AppUtils {
+
+    public static String getTodayDate() {
+        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
 
     public static void checkVersionUpdate(Context context, boolean progressStatus) {
         ProgressDialog dialogStatus = new ProgressDialog(context);
