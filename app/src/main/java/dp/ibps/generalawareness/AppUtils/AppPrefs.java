@@ -23,6 +23,19 @@ public class AppPrefs {
         mPrefsEditor.apply();
     }
 
+    //    User Profile methods User Name, Mobile Number, Pin Code
+    public static String getDOB(Context ctx) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return mPrefs.getString("date_of_birth", "");
+    }
+
+    public static void setDOB(Context ctx, String date_of_birth) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        mPrefsEditor = mPrefs.edit();
+        mPrefsEditor.putString("date_of_birth", date_of_birth);
+        mPrefsEditor.apply();
+    }
+
     public static String getMobile(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return mPrefs.getString("userMobile", "");

@@ -39,7 +39,7 @@ import dp.ibps.generalawareness.R;
 public class AppUtils {
 
     public static String getTodayDate() {
-        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MMM");
         Date date = new Date();
         return dateFormat.format(date);
     }
@@ -93,7 +93,7 @@ public class AppUtils {
                         }).show();
                     } else {
                         if (progressStatus)
-                            Toast.makeText(context, "You have latest version.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "You have latest version.", Toast.LENGTH_LONG).show();
                     }
                 }
             }

@@ -184,7 +184,7 @@ public class HomeActivity extends AppCompatActivity {
             finish();
         }
         isBackPressed = true;
-        Toast.makeText(this, "Please press again to Exit.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Please press again to Exit.", Toast.LENGTH_LONG).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

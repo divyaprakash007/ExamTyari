@@ -3,13 +3,16 @@ package dp.ibps.generalawareness.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,7 +34,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private String android_id;
     private FirebaseFirestore fs_db;
     private static final String TAG = "UpdateProfileActivity";
-    private Button skipButton, clearAllFieldsBtn, updateProfileBtn;
+    private Button updateProfileBtn;
     private TextInputEditText userNameEt, userMobileEt, userPinEt, dateOfBirth;
 
     /*
@@ -41,7 +44,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     User Area Pin Code (Check if User belong from Bareilly District the Show own Interstetial ads on Server update.)
     User Date of Birth (Enable Happy Birthday Message with User Profile Name on Splash Screen if Today match with Birthday)
     User device ID
- */
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         DocumentReference documentReference = fs_db.collection("userData").document(mobile);
 
         Map<String, Object> user = new HashMap<>();
-
         user.put("fName", "" + AppPrefs.getUserName(this));
         user.put("deviceId", "" + android_id);
         user.put("mobile", mobile);
@@ -68,12 +70,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(UpdateProfileActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateProfileActivity.this, "Success", Toast.LENGTH_LONG).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UpdateProfileActivity.this, "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateProfileActivity.this, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -90,27 +92,40 @@ public class UpdateProfileActivity extends AppCompatActivity {
         dateOfBirth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(UpdateProfileActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                // TODO: 26-02-2021 open calendar to update users date max 35years min 14years
             }
         });
 
         updateProfileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 25-02-2021 get all fields data like android id, user full name, user mobile number, area pin code and date of birth save to fb db
-                try {
-                    updateProfileDB();
-                } catch (Exception e) {
-                    Log.d(TAG, "onCreate: Exception " + " Mobile " + AppPrefs.getMobile(UpdateProfileActivity.this));
+                updateProfileBtn.setEnabled(false);
+                if (userNameEt.getText().toString().trim().length() < 3) {
+                    Toast.makeText(UpdateProfileActivity.this, "Please enter a valid name", Toast.LENGTH_LONG).show();
+                } else if (userPinEt.getText().toString().trim().length() < 6) {
+                    Toast.makeText(UpdateProfileActivity.this, "Please enter 6 digit valid PIN Code", Toast.LENGTH_LONG).show();
+                } else if (dateOfBirth.getText().toString().trim().length() < 5) {
+                    Toast.makeText(UpdateProfileActivity.this, "Please enter a valid Date of Birth.", Toast.LENGTH_LONG).show();
+                } else {
+                    try {
+                        AppPrefs.setDOB(UpdateProfileActivity.this, dateOfBirth.getText().toString().trim());
+                        updateProfileDB();
+                    } catch (Exception e) {
+                        Log.d(TAG, "onCreate: Exception " + " Mobile " + AppPrefs.getMobile(UpdateProfileActivity.this));
+                    }
                 }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateProfileBtn.setEnabled(true);
+                    }
+                }, 1000);
             }
         });
-
-
     }
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "Please update profile.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Please update profile.", Toast.LENGTH_LONG).show();
     }
 }

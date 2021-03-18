@@ -45,12 +45,12 @@ public class FeedBackActivity extends AppCompatActivity {
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(FeedBackActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FeedBackActivity.this, "Success", Toast.LENGTH_LONG).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(FeedBackActivity.this, "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(FeedBackActivity.this, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

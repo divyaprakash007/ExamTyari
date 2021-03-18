@@ -110,13 +110,13 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.show();
                 if (otp_login_button.getText().toString().equals("Send OTP")) {
                     if (mobile_et.getText().toString().length() != 10) {
-                        Toast.makeText(LoginActivity.this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Please enter a valid number", Toast.LENGTH_LONG).show();
                     } else {
                         sendOtpToMobile(mobile_et.getText().toString().trim());
                     }
                 } else {
                     if (otp_et.getText().toString().length() != 6) {
-                        Toast.makeText(LoginActivity.this, "Please enter a valid otp", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Please enter a valid otp", Toast.LENGTH_LONG).show();
                     } else {
                         otp_number = otp_et.getText().toString();
                         credential = PhoneAuthProvider.getCredential(verificationId, otp_number);
@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                         .setCallbacks(new OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                Toast.makeText(LoginActivity.this, "Verification Complete", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Verification Complete", Toast.LENGTH_LONG).show();
                                 otp_login_button.setText("Processing...");
                                 otp_login_button.setClickable(false);
                                 mobile_til.setEnabled(false);
@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             @Override
                             public void onVerificationFailed(@NonNull FirebaseException e) {
-                                Toast.makeText(LoginActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
                                 Log.d("TAG", "onVerificationFailed: " + e.getMessage());
                                 resetActivity();
                                 if (progressDialog != null) {
@@ -169,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                                 mobile_til.setEnabled(false);
                                 otp_til.setEnabled(true);
                                 verificationId = s;
-                                Toast.makeText(LoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "OTP Sent", Toast.LENGTH_LONG).show();
                                 mobileNumber = mobile_number;
                                 loginAttempt++;
                                 if (progressDialog != null) {
@@ -213,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this, UpdateProfileActivity.class));
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Verification Failed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Verification Failed.", Toast.LENGTH_LONG).show();
                     resetActivity();
                 }
                 if (progressDialog != null) {

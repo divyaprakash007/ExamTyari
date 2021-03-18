@@ -37,7 +37,6 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        // TODO: 25-02-2021 set full screen activity 
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -53,19 +52,34 @@ public class SplashScreen extends AppCompatActivity {
                 "शिक्षा सर्वोपर्य", "हमारा लक्ष्य, आपकी शिक्षा", "आपके लिए खास", "सफलता की उम्मीद में",
                 "आपकी शिक्षा को समर्पित", "Daily routine app"};
 
-        taglineTV.setText(taglines[AppUtils.getRandomNumber(0, taglines.length - 1)]);
+        try {
+            taglineTV.setText(taglines[AppUtils.getRandomNumber(0, taglines.length - 1)]);
+            if (!AppPrefs.getDOB(this).equals("")) {
+                if (AppPrefs.getDOB(this).equals(AppUtils.getTodayDate())) {
+                    taglineTV.setText(AppPrefs.getUserName(this) + ",\nWish you a very Happy birthday.\nGod Bless You.");
+
+                }
+            }
+        } catch (Exception e) {
+            taglineTV.setText(taglines[AppUtils.getRandomNumber(0, taglines.length - 1)]);
+        }
+
+
         try {
             docRef = db.collection("userData").document(AppPrefs.getMobile(SplashScreen.this));
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    deviceID_DB = documentSnapshot.getString("deviceId");
-                    String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                    try {
+                        deviceID_DB = documentSnapshot.getString("deviceId");
+                        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
-                    if (!deviceID_DB.equals(android_id)) {
-                        AppUtils.logoutUser(SplashScreen.this);
+                        if (!deviceID_DB.equals(android_id)) {
+                            AppUtils.logoutUser(SplashScreen.this);
+                        }
+                    } catch (Exception e) {
+
                     }
-
                 }
             });
 
@@ -97,6 +111,6 @@ public class SplashScreen extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "Please wait...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Please wait...", Toast.LENGTH_LONG).show();
     }
 }
