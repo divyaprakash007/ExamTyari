@@ -1,32 +1,42 @@
 package dp.ibps.generalawareness.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
+import android.app.Notification;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
-import dp.ibps.generalawareness.AppUtils.AppPrefs;
 import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.R;
 
 public class NotificationsActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private List<DocumentSnapshot> notifications;
+    private RecyclerView notificationRV;
+    private RecyclerView.Adapter notiAdapter;
+    private RecyclerView.LayoutManager notiLayoutManager;
+    private ProgressDialog notiDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,44 +46,36 @@ public class NotificationsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         db = FirebaseFirestore.getInstance();
+        notiDialog = new ProgressDialog(this);
+        notiDialog.setTitle("Loading");
+        notiDialog.setMessage("Please wait");
+        notiDialog.setCancelable(false);
+
         // TODO: 07-03-2021 working on this screen 
         if (AppUtils.isNetworkAvailable(NotificationsActivity.this)) {
-//            db.collection("notifications").document("length").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        for (int i = 0; i <= Integer.parseInt("" + task.getResult().get("length")); i++) {
-//                            Log.d("TAG", "onComplete: length of the list is " + task.getResult().get("length"));
-//                            if (i < Integer.parseInt("" + task.getResult().get("length"))) {
-//                                db.collection("notifications").document("" + i).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                        try {
-//                                            if (task.isSuccessful()) {
-//                                                notifications.add(task.getResult());
-//                                                Toast.makeText(NotificationsActivity.this, "List length " + notifications.size(), Toast.LENGTH_SHORT).show();
-//                                                Log.d("TAG", "onComplete: task Length : " + task.getResult().get("date").toString());
-//                                            } else {
-//                                                Log.d("TAG", "onComplete: Task is failed");
-//                                            }
-//                                        } catch (Exception e) {
-//                                            Toast.makeText(NotificationsActivity.this, "List Complete", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                });
-//                            } else {
-//                                Toast.makeText(NotificationsActivity.this, "proceed to recycler view", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//
-//                    } else {
-//
-//                    }
-//
-//                }
-//            });
-//
-
+            notiDialog.show();
+            db.collection("notifications").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        // TODO: 20-03-2021 get Data from Firebase db 
+                        Log.d("TAG", "onSuccess: ");
+                    } else {
+                        notificationRV = findViewById(R.id.notificationRV);
+                        notiLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
+                        notificationRV.setLayoutManager(notiLayoutManager);
+                        notificationRV.setAdapter(new NotificationAdapter(queryDocumentSnapshots));
+                    }
+                    notiDialog.dismiss();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // TODO: 20-03-2021 get Data from Firebase db
+//                    Toast.makeText(NotificationsActivity.this, "", Toast.LENGTH_SHORT).show();
+                    notiDialog.dismiss();
+                }
+            });
         } else {
             startActivity(new Intent(NotificationsActivity.this, NoInternetConnection.class));
         }
@@ -88,6 +90,66 @@ public class NotificationsActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
+
+        private QuerySnapshot queryDocumentSnapshots;
+
+        public NotificationAdapter(QuerySnapshot queryDocumentSnapshots) {
+            this.queryDocumentSnapshots = queryDocumentSnapshots;
+        }
+
+        @NonNull
+        @Override
+        public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notifications_view, parent, false);
+            NotificationViewHolder holder = new NotificationViewHolder(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
+            holder.noti_title_tv.setText(queryDocumentSnapshots.getDocuments().get(position).get("title").toString());
+            holder.noti_message_tv.setText(queryDocumentSnapshots.getDocuments().get(position).get("message").toString());
+            holder.noti_date_tv.setText("Date : " + queryDocumentSnapshots.getDocuments().get(position).get("date").toString());
+            if (queryDocumentSnapshots.getDocuments().get(position).get("link").toString().length() > 0) {
+                holder.noti_link_tv.setText(queryDocumentSnapshots.getDocuments().get(position).get("link").toString());
+                holder.noti_link_tv.setVisibility(View.VISIBLE);
+                holder.noti_link_tv.setEnabled(true);
+                holder.noti_cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("" + queryDocumentSnapshots.getDocuments().get(position).get("link").toString()));
+                        startActivity(browserIntent);
+                    }
+                });
+
+            } else {
+                holder.noti_link_tv.setVisibility(View.GONE);
+                holder.noti_link_tv.setEnabled(false);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return queryDocumentSnapshots.getDocuments().size();
+        }
+
+        public class NotificationViewHolder extends RecyclerView.ViewHolder {
+            public TextView noti_link_tv, noti_message_tv, noti_title_tv, noti_date_tv;
+            public CardView noti_cardView;
+
+            public NotificationViewHolder(@NonNull View itemView) {
+                super(itemView);
+                noti_link_tv = itemView.findViewById(R.id.noti_link_tv);
+                noti_message_tv = itemView.findViewById(R.id.noti_message_tv);
+                noti_title_tv = itemView.findViewById(R.id.noti_title_tv);
+                noti_date_tv = itemView.findViewById(R.id.noti_date_tv);
+                noti_cardView = itemView.findViewById(R.id.noti_cardView);
+
+            }
+        }
     }
 }
 
