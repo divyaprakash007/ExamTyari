@@ -81,4 +81,16 @@ public class AppPrefs {
         mPrefsEditor.putString("profileImg", profileImage);
         mPrefsEditor.apply();
     }
+
+    public static String getLastUsedDate(Context ctx) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return mPrefs.getString("lastDate", "");
+    }
+
+    public static void setLastUsedDate(Context ctx, String lastUsedDate) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        mPrefsEditor = mPrefs.edit();
+        mPrefsEditor.putString("lastDate", lastUsedDate);
+        mPrefsEditor.apply();
+    }
 }

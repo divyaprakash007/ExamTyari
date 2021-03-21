@@ -20,8 +20,6 @@
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="24sp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif"/>
 
     <TextView
@@ -37,7 +35,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:background="@color/black"/>
 
 </LinearLayout>

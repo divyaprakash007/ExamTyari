@@ -14,9 +14,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,8 +44,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,11 +64,15 @@ import dp.ibps.generalawareness.R;
 import okhttp3.internal.Version;
 
 public class HomeActivity extends AppCompatActivity {
+    private static final String TAG = "HomeActivity";
+    private ImageView profileImg;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
     private boolean isBackPressed = false;
     private FirebaseFirestore fb;
+    private DocumentReference docRef;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     // TODO: 23-02-2021 Quiz Screen Layout Design
     // TODO: 23-02-2021 mock test screen layout design
     // TODO: 23-02-2021 6 Newspapers Open in WebView
@@ -77,8 +88,20 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         initialise();
         lastUsingDate();
+        if(AppPrefs.getProfileImage(HomeActivity.this).length()<=20){
+            setProfileImage();
+        } else {
+            byte[] decodedString = Base64.decode(AppPrefs.getProfileImage(HomeActivity.this), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Glide.with(HomeActivity.this)
+                    .load(decodedByte)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(profileImg);
+            // TODO: 21-03-2021 convert base64 image and set in ImageView using Glide
+        }
 
-        navigationView = findViewById(R.id.nav_View);
+
+
         drawerLayout = findViewById(R.id.drawer);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
@@ -135,39 +158,72 @@ public class HomeActivity extends AppCompatActivity {
             }, 60000);
         }
 
-        View hView = navigationView.getHeaderView(0);
-        ImageView profileImg = hView.findViewById(R.id.profile_image);
-        Glide.with(HomeActivity.this)
-                .load("https://firebasestorage.googleapis.com/v0/b/examdb-7e9fb.appspot.com/o/Profile%20Images%2FA%2F1.png?alt=media&token=5affcf72-58d5-44cf-b644-12119a1dc9f1")
-                .into(profileImg);
-        if (AppPrefs.getProfileImage(HomeActivity.this).length() <= 0) {
 
-        } else {
+
+    }
+
+    private void setProfileImage() {
+        String firstChar = "" + AppPrefs.getUserName(HomeActivity.this).charAt(0);
+        try {
+            docRef = db.collection("userImageData").document(firstChar.toLowerCase());
+            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    try {
+                        String imageUrl = documentSnapshot.getString("" + AppUtils.getRandomNumber(0, 3));
+                        Glide.with(HomeActivity.this)
+                                .load(imageUrl)
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(profileImg);
+                        AppPrefs.setProfileImage(HomeActivity.this,AppUtils.getByteArrayFromImageURL(imageUrl));
+                    } catch (Exception e) {
+                        Glide.with(HomeActivity.this)
+                                .load(R.mipmap.logo)
+                                .transition(DrawableTransitionOptions.withCrossFade())
+                                .into(profileImg);
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            Glide.with(HomeActivity.this)
+                    .load(R.mipmap.logo)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(profileImg);
 
         }
-
     }
 
     private void initialise() {
         fb = FirebaseFirestore.getInstance();
-
+        navigationView = findViewById(R.id.nav_View);
+        View hView = navigationView.getHeaderView(0);
+        profileImg = hView.findViewById(R.id.profile_image);
+        TextView userName = hView.findViewById(R.id.user_name);
+        TextView userMobile = hView.findViewById(R.id.user_mobile_number);
+        userName.setText(AppPrefs.getUserName(HomeActivity.this));
+        userMobile.setText(AppPrefs.getMobile(HomeActivity.this));
 
 
     }
 
     private void lastUsingDate() {
-        try {
-            DocumentReference documentReference = fb.collection("userProfileData").document(AppPrefs.getMobile(this));
-            Map<String, Object> user = new HashMap<>();
-            user.put("lastUsedDate", "" + AppUtils.getTodayDate());
-            documentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-
-                }
-            });
-        } catch (Exception e) {
-            Toast.makeText(this, "Please login to enjoy more features in App.", Toast.LENGTH_LONG).show();
+        if (!AppUtils.getTodayDate().equalsIgnoreCase(AppPrefs.getLastUsedDate(HomeActivity.this))) {
+            try {
+                DocumentReference documentReference = fb.collection("userProfileData").document(AppPrefs.getMobile(this));
+                Map<String, Object> user = new HashMap<>();
+                user.put("lastUsedDate", "" + AppUtils.getTodayDate());
+                documentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        AppPrefs.setLastUsedDate(HomeActivity.this, AppUtils.getTodayDate());
+                        Log.d("TAG", "lastUsingDate: " + AppUtils.getTodayDate() + " Pref Date " + AppPrefs.getLastUsedDate(HomeActivity.this));
+                    }
+                });
+            } catch (Exception e) {
+                Toast.makeText(this, "Please login to enjoy more features in App.", Toast.LENGTH_LONG).show();
+                AppUtils.logoutUser(HomeActivity.this);
+            }
         }
 
     }

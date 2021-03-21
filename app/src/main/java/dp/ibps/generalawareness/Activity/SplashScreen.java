@@ -63,7 +63,6 @@ public class SplashScreen extends AppCompatActivity {
             taglineTV.setText(taglines[AppUtils.getRandomNumber(0, taglines.length - 1)]);
         }
 
-
         try {
             docRef = db.collection("userProfileData").document(AppPrefs.getMobile(SplashScreen.this));
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -103,7 +102,6 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(intent);
-                finish();
             }
         }, 2500);
     }

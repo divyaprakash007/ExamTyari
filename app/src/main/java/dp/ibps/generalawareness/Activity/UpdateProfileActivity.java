@@ -73,6 +73,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                AppPrefs.setProfileImage(UpdateProfileActivity.this, "");
                 Toast.makeText(UpdateProfileActivity.this, "Profile Updated.", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(UpdateProfileActivity.this, HomeActivity.class));
                 finish();

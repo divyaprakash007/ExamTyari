@@ -7,8 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.StrictMode;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +31,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -149,6 +157,25 @@ public class AppUtils {
         AppPrefs.setUserName(context, "");
         AppPrefs.setMobile(context, "");
         AppPrefs.setPin(context, "");
+        AppPrefs.setProfileImage(context, "");
+    }
+
+    public static String getByteArrayFromImageURL(String url) {
+        URL newurl;
+        Bitmap bitmap;
+        String base64 = "";
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            newurl = new URL(url);
+            bitmap = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return base64;
     }
 
     public static void sendErrorMessage(Context context, String todayDate, String message, String link, String screenName) {
