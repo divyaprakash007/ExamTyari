@@ -76,6 +76,7 @@ public class AppUtils {
                     try {
                         PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
                         versionName = (pinfo.versionName).trim();
+                        AppPrefs.setLastUsedDate(context,AppUtils.getTodayDate());
                     } catch (Exception e) {
                         versionName = (AppPrefs.getVersionCode(context)).trim();
                     }

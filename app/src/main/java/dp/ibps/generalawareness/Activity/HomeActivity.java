@@ -88,19 +88,6 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         initialise();
         lastUsingDate();
-        if(AppPrefs.getProfileImage(HomeActivity.this).length()<=20){
-            setProfileImage();
-        } else {
-            byte[] decodedString = Base64.decode(AppPrefs.getProfileImage(HomeActivity.this), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Glide.with(HomeActivity.this)
-                    .load(decodedByte)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(profileImg);
-            // TODO: 21-03-2021 convert base64 image and set in ImageView using Glide
-        }
-
-
 
         drawerLayout = findViewById(R.id.drawer);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
@@ -125,9 +112,10 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.rate_us:
                         AppUtils.rateUs(HomeActivity.this);
                         break;
-                    case R.id.feedback:
-                        startActivity(new Intent(HomeActivity.this, FeedBackActivity.class));
-                        break;
+//                    case R.id.feedback:
+//                        // TODO: 21-03-2021 Need to be active in Next Version
+//                        startActivity(new Intent(HomeActivity.this, FeedBackActivity.class));
+//                        break;
                     case R.id.privacy_policy:
                         Intent intent_privacyPolicy = new Intent(HomeActivity.this, WebViewActivity.class);
                         intent_privacyPolicy.putExtra(AppConstant.webIntentKey, 1);
@@ -147,6 +135,8 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        if (!AppPrefs.getLastUsedDate(HomeActivity.this).equalsIgnoreCase(AppUtils.getTodayDate())){
         try {
             AppUtils.checkVersionUpdate(HomeActivity.this, false);
         } catch (Exception e) {
@@ -156,9 +146,18 @@ public class HomeActivity extends AppCompatActivity {
                     AppUtils.checkVersionUpdate(HomeActivity.this, false);
                 }
             }, 60000);
+        } }
+
+        if(AppPrefs.getProfileImage(HomeActivity.this).length()<=20){
+            setProfileImage();
+        } else {
+            byte[] decodedString = Base64.decode(AppPrefs.getProfileImage(HomeActivity.this), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Glide.with(HomeActivity.this)
+                    .load(decodedByte)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(profileImg);
         }
-
-
 
     }
 
