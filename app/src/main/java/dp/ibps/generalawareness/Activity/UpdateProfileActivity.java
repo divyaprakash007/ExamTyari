@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -27,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dp.ibps.generalawareness.AppUtils.AppPrefs;
+import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.R;
 
 public class UpdateProfileActivity extends AppCompatActivity {
@@ -35,12 +39,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private FirebaseFirestore fs_db;
     private static final String TAG = "UpdateProfileActivity";
     private Button updateProfileBtn;
-    private TextInputEditText userNameEt, userMobileEt, userPinEt, dateOfBirth;
+    private TextInputEditText userNameEt, userMobileEt, userPinEt;
 
     /*
     User Name
     User Mobile number
-    User Email
     User Area Pin Code (Check if User belong from Bareilly District the Show own Interstetial ads on Server update.)
     User Date of Birth (Enable Happy Birthday Message with User Profile Name on Splash Screen if Today match with Birthday)
     User device ID
@@ -52,30 +55,34 @@ public class UpdateProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_profile);
         getSupportActionBar().setTitle("Update Profile");
         initialise();
-        // TODO: 23-02-2021 Update User Profile to server also save user details in Prefs.
-        // TODO: 25-02-2021 set Full screen activity 
+        // TODO: 21-03-2021 NextVersion Update user dob all other things with date are tested okay
 
     }
 
     private void updateProfileDB() {
         fs_db = FirebaseFirestore.getInstance();
         String mobile = "" + AppPrefs.getMobile(this);
-        DocumentReference documentReference = fs_db.collection("userData").document(mobile);
+        DocumentReference documentReference = fs_db.collection("userProfileData").document(mobile);
 
         Map<String, Object> user = new HashMap<>();
         user.put("fName", "" + AppPrefs.getUserName(this));
         user.put("deviceId", "" + android_id);
         user.put("mobile", mobile);
+        user.put("pinCode", AppPrefs.getPin(UpdateProfileActivity.this));
 
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(UpdateProfileActivity.this, "Success", Toast.LENGTH_LONG).show();
+                Toast.makeText(UpdateProfileActivity.this, "Profile Updated.", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(UpdateProfileActivity.this, HomeActivity.class));
+                finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UpdateProfileActivity.this, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(UpdateProfileActivity.this, "Server Error!", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(UpdateProfileActivity.this, HomeActivity.class));
+                finish();
             }
         });
     }
@@ -85,14 +92,24 @@ public class UpdateProfileActivity extends AppCompatActivity {
         userNameEt = findViewById(R.id.user_name_et);
         userMobileEt = findViewById(R.id.user_mobile_et);
         userPinEt = findViewById(R.id.user_pin_et);
-        dateOfBirth = findViewById(R.id.date_of_birth);
         updateProfileBtn = findViewById(R.id.update_profile_btn);
         userMobileEt.setText("+91" + AppPrefs.getMobile(this));
 
-        dateOfBirth.setOnClickListener(new View.OnClickListener() {
+        userPinEt.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                // TODO: 26-02-2021 open calendar to update users date max 35years min 14years
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 6)
+                    AppUtils.hideKeyboard(UpdateProfileActivity.this);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -104,15 +121,10 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     Toast.makeText(UpdateProfileActivity.this, "Please enter a valid name", Toast.LENGTH_LONG).show();
                 } else if (userPinEt.getText().toString().trim().length() < 6) {
                     Toast.makeText(UpdateProfileActivity.this, "Please enter 6 digit valid PIN Code", Toast.LENGTH_LONG).show();
-                } else if (dateOfBirth.getText().toString().trim().length() < 5) {
-                    Toast.makeText(UpdateProfileActivity.this, "Please enter a valid Date of Birth.", Toast.LENGTH_LONG).show();
                 } else {
-                    try {
-                        AppPrefs.setDOB(UpdateProfileActivity.this, dateOfBirth.getText().toString().trim());
-                        updateProfileDB();
-                    } catch (Exception e) {
-                        Log.d(TAG, "onCreate: Exception " + " Mobile " + AppPrefs.getMobile(UpdateProfileActivity.this));
-                    }
+                    AppPrefs.setPin(UpdateProfileActivity.this, userPinEt.getText().toString().trim());
+                    AppPrefs.setUserName(UpdateProfileActivity.this, userNameEt.getText().toString().trim());
+                    updateProfileDB();
                 }
                 new Handler().postDelayed(new Runnable() {
                     @Override

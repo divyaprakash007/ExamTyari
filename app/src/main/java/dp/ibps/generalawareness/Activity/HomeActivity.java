@@ -9,9 +9,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,9 +21,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +35,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -124,17 +135,29 @@ public class HomeActivity extends AppCompatActivity {
             }, 60000);
         }
 
+        View hView = navigationView.getHeaderView(0);
+        ImageView profileImg = hView.findViewById(R.id.profile_image);
+        Glide.with(HomeActivity.this)
+                .load("https://firebasestorage.googleapis.com/v0/b/examdb-7e9fb.appspot.com/o/Profile%20Images%2FA%2F1.png?alt=media&token=5affcf72-58d5-44cf-b644-12119a1dc9f1")
+                .into(profileImg);
+        if (AppPrefs.getProfileImage(HomeActivity.this).length() <= 0) {
+
+        } else {
+
+        }
+
     }
 
     private void initialise() {
         fb = FirebaseFirestore.getInstance();
 
 
+
     }
 
     private void lastUsingDate() {
         try {
-            DocumentReference documentReference = fb.collection("userData").document(AppPrefs.getMobile(this));
+            DocumentReference documentReference = fb.collection("userProfileData").document(AppPrefs.getMobile(this));
             Map<String, Object> user = new HashMap<>();
             user.put("lastUsedDate", "" + AppUtils.getTodayDate());
             documentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {

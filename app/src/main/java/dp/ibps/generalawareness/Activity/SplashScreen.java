@@ -57,7 +57,6 @@ public class SplashScreen extends AppCompatActivity {
             if (!AppPrefs.getDOB(this).equals("")) {
                 if (AppPrefs.getDOB(this).equals(AppUtils.getTodayDate())) {
                     taglineTV.setText(AppPrefs.getUserName(this) + ",\nWish you a very Happy birthday.\nGod Bless You.");
-
                 }
             }
         } catch (Exception e) {
@@ -66,7 +65,7 @@ public class SplashScreen extends AppCompatActivity {
 
 
         try {
-            docRef = db.collection("userData").document(AppPrefs.getMobile(SplashScreen.this));
+            docRef = db.collection("userProfileData").document(AppPrefs.getMobile(SplashScreen.this));
             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {

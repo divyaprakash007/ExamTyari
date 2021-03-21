@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Enter area PIN code">
+                android:hint="Enter area PIN code 6-Digits">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/user_pin_et"
@@ -80,26 +80,6 @@
                     android:layout_height="match_parent"
                     android:digits="0123456789"
                     android:inputType="phone"
-                    android:textColor="@color/gradient_end_color"
-                    android:textSize="18sp"
-                    android:singleLine="true"
-                    android:maxLength="6"
-                    android:maxEms="1"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Date of Birth">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/date_of_birth"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:digits="0123456789"
-                    android:enabled="true"
                     android:textColor="@color/gradient_end_color"
                     android:textSize="18sp"
                     android:singleLine="true"

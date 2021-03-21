@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,10 +33,7 @@ import dp.ibps.generalawareness.R;
 
 public class NotificationsActivity extends AppCompatActivity {
     private FirebaseFirestore db;
-    private List<DocumentSnapshot> notifications;
     private RecyclerView notificationRV;
-    private RecyclerView.Adapter notiAdapter;
-    private RecyclerView.LayoutManager notiLayoutManager;
     private ProgressDialog notiDialog;
 
     @Override
@@ -51,7 +49,6 @@ public class NotificationsActivity extends AppCompatActivity {
         notiDialog.setMessage("Please wait");
         notiDialog.setCancelable(false);
 
-        // TODO: 07-03-2021 working on this screen 
         if (AppUtils.isNetworkAvailable(NotificationsActivity.this)) {
             notiDialog.show();
             db.collection("notifications").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -62,8 +59,8 @@ public class NotificationsActivity extends AppCompatActivity {
                         Log.d("TAG", "onSuccess: ");
                     } else {
                         notificationRV = findViewById(R.id.notificationRV);
-                        notiLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
-                        notificationRV.setLayoutManager(notiLayoutManager);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(NotificationsActivity.this);
+                        notificationRV.setLayoutManager(linearLayoutManager);
                         notificationRV.setAdapter(new NotificationAdapter(queryDocumentSnapshots));
                     }
                     notiDialog.dismiss();
@@ -110,18 +107,27 @@ public class NotificationsActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-            holder.noti_title_tv.setText(queryDocumentSnapshots.getDocuments().get(position).get("title").toString());
-            holder.noti_message_tv.setText(queryDocumentSnapshots.getDocuments().get(position).get("message").toString());
-            holder.noti_date_tv.setText("Date : " + queryDocumentSnapshots.getDocuments().get(position).get("date").toString());
-            if (queryDocumentSnapshots.getDocuments().get(position).get("link").toString().length() > 0) {
-                holder.noti_link_tv.setText(queryDocumentSnapshots.getDocuments().get(position).get("link").toString());
+            holder.noti_title_tv.setText(queryDocumentSnapshots.getDocuments().get((queryDocumentSnapshots.getDocuments().size() - 1) - position).get("title").toString());
+            holder.noti_message_tv.setText(queryDocumentSnapshots.getDocuments().get((queryDocumentSnapshots.getDocuments().size() - 1) - position).get("message").toString());
+            holder.noti_date_tv.setText("Date : " + queryDocumentSnapshots.getDocuments().get((queryDocumentSnapshots.getDocuments().size() - 1) - position).get("date").toString());
+            if (queryDocumentSnapshots.getDocuments().get((queryDocumentSnapshots.getDocuments().size() - 1) - position).get("link").toString().length() > 0) {
+                holder.noti_link_tv.setText(queryDocumentSnapshots.getDocuments().get((queryDocumentSnapshots.getDocuments().size() - 1) - position).get("link").toString());
                 holder.noti_link_tv.setVisibility(View.VISIBLE);
                 holder.noti_link_tv.setEnabled(true);
                 holder.noti_cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("" + queryDocumentSnapshots.getDocuments().get(position).get("link").toString()));
-                        startActivity(browserIntent);
+                        try {
+                            String url = "" + queryDocumentSnapshots.getDocuments().get((queryDocumentSnapshots.getDocuments().size() - 1) - position).get("link").toString();
+                            if (!url.contains("https://")) {
+                                url = "https://" + url;
+                            }
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(browserIntent);
+                        } catch (Exception e) {
+                            Toast.makeText(NotificationsActivity.this, "Server busy! Please try after some time.", Toast.LENGTH_SHORT).show();
+                            AppUtils.sendErrorMessage(NotificationsActivity.this, AppUtils.getTodayDate(), e.getMessage(), queryDocumentSnapshots.getDocuments().get((queryDocumentSnapshots.getDocuments().size() - 1) - position).get("link").toString(), "notifications");
+                        }
                     }
                 });
 

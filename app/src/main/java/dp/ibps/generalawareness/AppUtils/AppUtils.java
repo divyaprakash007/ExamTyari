@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,9 +31,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
+import dp.ibps.generalawareness.Activity.FeedBackActivity;
 import dp.ibps.generalawareness.Activity.HomeActivity;
 import dp.ibps.generalawareness.R;
 
@@ -145,6 +149,30 @@ public class AppUtils {
         AppPrefs.setUserName(context, "");
         AppPrefs.setMobile(context, "");
         AppPrefs.setPin(context, "");
+    }
+
+    public static void sendErrorMessage(Context context, String todayDate, String message, String link, String screenName) {
+        FirebaseFirestore fs_db = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = fs_db.collection("errorMessage").document(link);
+
+        Map<String, Object> user = new HashMap<>();
+
+        user.put("date", "" + todayDate);
+        user.put("message", message);
+        user.put("screen", screenName);
+
+        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
     }
 
 
