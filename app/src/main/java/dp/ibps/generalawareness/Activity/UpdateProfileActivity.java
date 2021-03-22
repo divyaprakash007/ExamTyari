@@ -96,6 +96,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
         updateProfileBtn = findViewById(R.id.update_profile_btn);
         userMobileEt.setText("+91" + AppPrefs.getMobile(this));
 
+        if (AppPrefs.getUserName(UpdateProfileActivity.this).length() > 2 && AppPrefs.getPin(UpdateProfileActivity.this).length() > 2) {
+            userNameEt.setText(AppPrefs.getUserName(UpdateProfileActivity.this));
+            userPinEt.setText(AppPrefs.getPin(UpdateProfileActivity.this));
+        }
+
         userPinEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
