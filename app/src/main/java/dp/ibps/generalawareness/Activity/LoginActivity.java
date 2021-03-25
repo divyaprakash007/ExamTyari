@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onVerificationFailed(@NonNull FirebaseException e) {
                                 Toast.makeText(LoginActivity.this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
-                                Log.d("TAG", "onVerificationFailed: " + e.getMessage());
+                                Log.d(getResources().getString(R.string.tag), "onVerificationFailed: " + e.getMessage());
                                 resetActivity();
                                 if (progressDialog != null) {
                                     progressDialog.dismiss();
@@ -235,7 +235,7 @@ public class LoginActivity extends AppCompatActivity {
         skipTV = findViewById(R.id.skipTV);
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Processing...");
-        progressDialog.setMessage("Please wait.");
+        progressDialog.setMessage(getResources().getString(R.string.wait_message));
         progressDialog.setCancelable(false);
 
         skipTV.setOnClickListener(new View.OnClickListener() {

@@ -3,11 +3,12 @@
     package="dp.ibps.generalawareness">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="@string/true_val"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo"
-        android:supportsRtl="true"
+        android:supportsRtl="@string/true_val"
+        android:usesCleartextTraffic="@string/true_val"
         android:theme="@style/Theme.ExamTyari">
         <activity android:name=".Activity.MockTestResultActivity"></activity>
         <activity android:name=".Activity.MockTestActivity" />
@@ -19,24 +20,24 @@
         <activity android:name=".Activity.SettingsActivity" />
         <activity
             android:name=".Activity.LoginActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="@string/portrait_val"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.UpdateProfileActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="@string/portrait_val" />
         <activity
             android:name=".Activity.WebViewActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="@string/portrait_val" />
         <activity
             android:name=".Activity.HomeActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="@string/portrait_val"
             android:theme="@style/SplashTheme" />
         <activity
             android:name=".Activity.IntroSliderScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="@string/portrait_val" />
         <activity
             android:name=".Activity.SplashScreen"
-            android:screenOrientation="portrait"
+            android:screenOrientation="@string/portrait_val"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +49,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 </manifest>

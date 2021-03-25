@@ -39,7 +39,7 @@ public class FeedBackActivity extends AppCompatActivity {
         Map<String, Object> user = new HashMap<>();
 
         user.put("fName", "" + AppPrefs.getUserName(this));
-        user.put("message", "User's Feedback Message has been saved.");
+        user.put(getResources().getString(R.string.message), "User's Feedback Message has been saved.");
         user.put("mobile", mobile);
 
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -59,7 +59,7 @@ public class AppUtils {
     public static void checkVersionUpdate(Context context, boolean progressStatus) {
         ProgressDialog dialogStatus = new ProgressDialog(context);
         if (progressStatus) {
-            dialogStatus.setTitle("Please wait");
+            dialogStatus.setTitle(context.getResources().getString(R.string.wait_message));
             dialogStatus.setMessage("Looking for updates.");
             dialogStatus.setCancelable(false);
             dialogStatus.show();
@@ -82,7 +82,7 @@ public class AppUtils {
                     }
 
                     if (!versionName.equals("" + task.getResult().get("Version"))) {
-                        Log.d("TAG", "onComplete: Version details : " + versionName + " Version Details : " + task.getResult().get("Version"));
+                        Log.d(context.getResources().getString(R.string.tag), "onComplete: Version details : " + versionName + " Version Details : " + task.getResult().get("Version"));
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("Version Update : " + task.getResult().get("Version"));
                         builder.setMessage(context.getResources().getString(R.string.app_name) + " has a new Version Update.");
@@ -185,8 +185,8 @@ public class AppUtils {
 
         Map<String, Object> user = new HashMap<>();
 
-        user.put("date", "" + todayDate);
-        user.put("message", message);
+        user.put(context.getResources().getString(R.string.date), "" + todayDate);
+        user.put(context.getResources().getString(R.string.message), message);
         user.put("screen", screenName);
 
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {

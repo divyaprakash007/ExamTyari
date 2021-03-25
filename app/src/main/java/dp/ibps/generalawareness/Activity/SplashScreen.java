@@ -54,6 +54,7 @@ public class SplashScreen extends AppCompatActivity {
 
         try {
             taglineTV.setText(taglines[AppUtils.getRandomNumber(0, taglines.length - 1)]);
+            // TODO: 25-03-2021 compare the date of birth with today date to show message
             if (!AppPrefs.getDOB(this).equals("")) {
                 if (AppPrefs.getDOB(this).equals(AppUtils.getTodayDate())) {
                     taglineTV.setText(AppPrefs.getUserName(this) + ",\nWish you a very Happy birthday.\nGod Bless You.");
@@ -69,7 +70,7 @@ public class SplashScreen extends AppCompatActivity {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     try {
-                        deviceID_DB = documentSnapshot.getString("deviceId");
+                        deviceID_DB = documentSnapshot.getString(getResources().getString(R.string.deviceId));
                         String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
                         if (!deviceID_DB.equals(android_id)) {
@@ -108,6 +109,6 @@ public class SplashScreen extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "Please wait...", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.wait_message), Toast.LENGTH_LONG).show();
     }
 }

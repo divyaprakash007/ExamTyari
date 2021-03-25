@@ -66,7 +66,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         Map<String, Object> user = new HashMap<>();
         user.put("fName", "" + AppPrefs.getUserName(this));
-        user.put("deviceId", "" + android_id);
+        user.put(getResources().getString(R.string.deviceId), "" + android_id);
         user.put("mobile", mobile);
         user.put("pinCode", AppPrefs.getPin(UpdateProfileActivity.this));
 
@@ -82,6 +82,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(UpdateProfileActivity.this, "Server Error!", Toast.LENGTH_LONG).show();
+                AppUtils.sendErrorMessage(UpdateProfileActivity.this,AppUtils.getTodayDate(),""+e.getMessage(),"","UpdateProfileActivity");
                 startActivity(new Intent(UpdateProfileActivity.this, HomeActivity.class));
                 finish();
             }

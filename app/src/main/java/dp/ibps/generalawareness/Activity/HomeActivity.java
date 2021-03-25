@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +76,7 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseFirestore fb;
     private DocumentReference docRef;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ProgressDialog dialog;
     // TODO: 23-02-2021 Quiz Screen Layout Design
     // TODO: 23-02-2021 mock test screen layout design
     // TODO: 23-02-2021 6 Newspapers Open in WebView
@@ -94,12 +98,25 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        //get fragment transaction
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        //set new fragment in fragment_container (FrameLayout)
+        fragmentTransaction.replace(R.id.frameLayout, new HomeFragment());
+        fragmentTransaction.commit();
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.update:
-                        startActivity(new Intent(HomeActivity.this, UpdateProfileActivity.class));
+                        if (AppUtils.isNetworkAvailable(HomeActivity.this)) {
+                            startActivity(new Intent(HomeActivity.this, UpdateProfileActivity.class));
+                        } else {
+                            startActivity(new Intent(HomeActivity.this, NoInternetConnection.class));
+                        }
                         break;
                     case R.id.about_us:
                         Intent intent_aboutUs = new Intent(HomeActivity.this, WebViewActivity.class);
@@ -123,8 +140,8 @@ public class HomeActivity extends AppCompatActivity {
                         break;
                     case R.id.version_code:
                         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                        builder.setTitle("Your App Version : " + AppPrefs.getVersionCode(HomeActivity.this));
-                        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                        builder.setTitle(getResources().getString(R.string.app_version_msg) + AppPrefs.getVersionCode(HomeActivity.this));
+                        builder.setPositiveButton(getResources().getString(R.string.okay), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -136,19 +153,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        if (!AppPrefs.getLastUsedDate(HomeActivity.this).equalsIgnoreCase(AppUtils.getTodayDate())){
-        try {
-            AppUtils.checkVersionUpdate(HomeActivity.this, false);
-        } catch (Exception e) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    AppUtils.checkVersionUpdate(HomeActivity.this, false);
-                }
-            }, 60000);
-        } }
+        if (!AppPrefs.getLastUsedDate(HomeActivity.this).equalsIgnoreCase(AppUtils.getTodayDate())) {
+            try {
+                AppUtils.checkVersionUpdate(HomeActivity.this, false);
+            } catch (Exception e) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppUtils.checkVersionUpdate(HomeActivity.this, false);
+                    }
+                }, 60000);
+            }
+        }
 
-        if(AppPrefs.getProfileImage(HomeActivity.this).length()<=20){
+        if (AppPrefs.getProfileImage(HomeActivity.this).length() <= 20) {
             setProfileImage();
         } else {
             byte[] decodedString = Base64.decode(AppPrefs.getProfileImage(HomeActivity.this), Base64.DEFAULT);
@@ -157,6 +175,10 @@ public class HomeActivity extends AppCompatActivity {
                     .load(decodedByte)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(profileImg);
+        }
+
+        if (dialog.isShowing()) {
+            dialog.dismiss();
         }
 
     }
@@ -174,7 +196,7 @@ public class HomeActivity extends AppCompatActivity {
                                 .load(imageUrl)
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .into(profileImg);
-                        AppPrefs.setProfileImage(HomeActivity.this,AppUtils.getByteArrayFromImageURL(imageUrl));
+                        AppPrefs.setProfileImage(HomeActivity.this, AppUtils.getByteArrayFromImageURL(imageUrl));
                     } catch (Exception e) {
                         Glide.with(HomeActivity.this)
                                 .load(R.mipmap.logo)
@@ -191,11 +213,17 @@ public class HomeActivity extends AppCompatActivity {
                     .into(profileImg);
 
         }
+
     }
 
     private void initialise() {
         fb = FirebaseFirestore.getInstance();
         navigationView = findViewById(R.id.nav_View);
+        dialog = new ProgressDialog(HomeActivity.this);
+        dialog.setTitle(getResources().getString(R.string.loading_message));
+        dialog.setMessage(getResources().getString(R.string.wait_message));
+        dialog.setCancelable(false);
+        dialog.show();
         View hView = navigationView.getHeaderView(0);
         profileImg = hView.findViewById(R.id.profile_image);
         TextView userName = hView.findViewById(R.id.user_name);
@@ -216,7 +244,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         AppPrefs.setLastUsedDate(HomeActivity.this, AppUtils.getTodayDate());
-                        Log.d("TAG", "lastUsingDate: " + AppUtils.getTodayDate() + " Pref Date " + AppPrefs.getLastUsedDate(HomeActivity.this));
+                        Log.d(getResources().getString(R.string.tag), "lastUsingDate: " + AppUtils.getTodayDate() + " Pref Date " + AppPrefs.getLastUsedDate(HomeActivity.this));
                     }
                 });
             } catch (Exception e) {

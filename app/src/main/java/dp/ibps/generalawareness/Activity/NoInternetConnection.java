@@ -85,7 +85,7 @@ public class NoInternetConnection extends AppCompatActivity {
         recheck_internet = findViewById(R.id.recheck_internet);
         progressDialog = new ProgressDialog(NoInternetConnection.this);
         progressDialog.setTitle("Connecting...");
-        progressDialog.setMessage("Please wait.");
+        progressDialog.setMessage(getResources().getString(R.string.wait_message));
         progressDialog.setCancelable(false);
 
 

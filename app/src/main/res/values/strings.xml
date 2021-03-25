@@ -12,7 +12,21 @@
     <string name="mobile_number">Mobile Number</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="loading_message">Loading</string>
+    <string name="wait_message">Please wait</string>
+    <string name="okay">Okay</string>
+    <string name="app_version_msg">Your App Version : </string>
+    <string name="link" translatable="false">link</string>
+    <string name="title" translatable="false">title</string>
+    <string name="message" translatable="false">message</string>
+    <string name="date" translatable="false">date</string>
+    <string name="tag" translatable="false">tag</string>
+    <string name="true_val" translatable="false">true</string>
+    <string name="portrait_val" translatable="false">portrait</string>
+    <string name="deviceId" translatable="false">deviceId</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello Home fragment</string>
+
+
 
 </resources>

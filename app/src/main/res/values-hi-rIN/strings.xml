@@ -13,4 +13,8 @@
     <string name="mobile_number">मोबाइल नंबर</string>
     <string name="open">ओपन</string>
     <string name="close">क्लोज</string>
+    <string name="loading_message">लोड हो रहा है</string>
+    <string name="wait_message">कृपया प्रतिक्षा करिये।</string>
+    <string name="okay">ओके</string>
+    <string name="app_version_msg">आपकी ऍप का वर्जन :</string>
 </resources>
