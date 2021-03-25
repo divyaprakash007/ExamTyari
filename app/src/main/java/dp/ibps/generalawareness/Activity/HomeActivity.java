@@ -77,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
     private DocumentReference docRef;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ProgressDialog dialog;
+    private boolean clicked = true;
     // TODO: 23-02-2021 Quiz Screen Layout Design
     // TODO: 23-02-2021 mock test screen layout design
     // TODO: 23-02-2021 6 Newspapers Open in WebView
@@ -262,16 +263,27 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.notifications:
-                startActivity(new Intent(HomeActivity.this, NotificationsActivity.class));
-                break;
-            case R.id.check_update:
-                AppUtils.checkVersionUpdate(HomeActivity.this, true);
-                break;
-            case R.id.settings:
-                startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
-                break;
+        if (clicked) {
+            clicked = false;
+            switch (id) {
+                case R.id.notifications:
+                    startActivity(new Intent(HomeActivity.this, NotificationsActivity.class));
+                    break;
+                case R.id.check_update:
+                    AppUtils.checkVersionUpdate(HomeActivity.this, true);
+                    break;
+                case R.id.settings:
+                    startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+                    break;
+            }
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    clicked = true;
+                }
+            }, 1000);
+
         }
         return super.onOptionsItemSelected(item);
     }

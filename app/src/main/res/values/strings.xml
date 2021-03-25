@@ -27,7 +27,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello Home fragment</string>
 
-<!--    Preference Keys -->
+    <!--    Preference Keys -->
     <string name="userName" translatable="false">userName</string>
     <string name="date_of_birth" translatable="false">date_of_birth</string>
     <string name="userMobile" translatable="false">userMobile</string>

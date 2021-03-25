@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_baseline_home"
+        android:enabled="true"
+        android:title="Home" />
+    <item
+        android:id="@+id/navigation_audio"
+        android:icon="@drawable/ic_baseline_audio"
+        android:title="Audio" />
+    <item
+        android:id="@+id/navigation_mocktest"
+        android:icon="@drawable/ic_baseline_mock_test"
+        android:title="Mock Test" />
+    <item
+        android:id="@+id/navigation_weekly_Quiz"
+        android:icon="@drawable/ic_baseline_quiz"
+        android:title="Weekly Quiz" />
+    <item
+        android:id="@+id/navigation_game"
+        android:icon="@drawable/ic_baseline_game"
+        android:title="Game" />
+</menu>

@@ -14,7 +14,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_alignParentLeft="@string/true_val"
             android:layout_alignParentRight="@string/true_val"
             android:layout_alignParentTop="@string/true_val"
@@ -23,12 +23,12 @@
 
     </RelativeLayout>
 
-        <FrameLayout
-            android:id="@+id/frameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_marginTop="56dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/homeToolbar" />
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
