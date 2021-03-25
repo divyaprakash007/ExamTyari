@@ -77,8 +77,10 @@ public class AppUtils {
                         PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
                         versionName = (pinfo.versionName).trim();
                         AppPrefs.setLastUsedDate(context,AppUtils.getTodayDate());
+                        AppPrefs.setVersionCode(context,versionName);
                     } catch (Exception e) {
                         versionName = (AppPrefs.getVersionCode(context)).trim();
+                        AppUtils.sendErrorMessage(context,AppUtils.getTodayDate(),e.getMessage(),"",""+context.getClass().getName());
                     }
 
                     if (!versionName.equals("" + task.getResult().get("Version"))) {
@@ -181,13 +183,13 @@ public class AppUtils {
 
     public static void sendErrorMessage(Context context, String todayDate, String message, String link, String screenName) {
         FirebaseFirestore fs_db = FirebaseFirestore.getInstance();
-        DocumentReference documentReference = fs_db.collection("errorMessage").document(link);
+        DocumentReference documentReference = fs_db.collection("errorMessage").document(screenName);
 
         Map<String, Object> user = new HashMap<>();
 
         user.put(context.getResources().getString(R.string.date), "" + todayDate);
         user.put(context.getResources().getString(R.string.message), message);
-        user.put("screen", screenName);
+        user.put("link", link);
 
         documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

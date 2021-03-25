@@ -230,8 +230,6 @@ public class HomeActivity extends AppCompatActivity {
         TextView userMobile = hView.findViewById(R.id.user_mobile_number);
         userName.setText(AppPrefs.getUserName(HomeActivity.this));
         userMobile.setText(AppPrefs.getMobile(HomeActivity.this));
-
-
     }
 
     private void lastUsingDate() {

@@ -42,7 +42,7 @@ public class NotificationsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
-        getSupportActionBar().setTitle(getResources().getString(R.string.title));
+        getSupportActionBar().setTitle("Notifications");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         notificationRV = findViewById(R.id.notificationRV);
@@ -58,7 +58,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
         if (AppUtils.isNetworkAvailable(NotificationsActivity.this)) {
             notiDialog.show();
-            db.collection(getResources().getString(R.string.title)).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            db.collection("notifications").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                     if (queryDocumentSnapshots.isEmpty()) {

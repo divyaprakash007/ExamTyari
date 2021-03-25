@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import dp.ibps.generalawareness.R;
+
 public class AppPrefs {
     private static SharedPreferences mPrefs;
     private static SharedPreferences.Editor mPrefsEditor;
@@ -11,86 +13,86 @@ public class AppPrefs {
     //    User Profile methods User Name, Mobile Number, Pin Code
     public static String getUserName(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString("userName", "Guest User");
+        return mPrefs.getString(ctx.getResources().getString(R.string.userName), "Guest User");
     }
 
     public static void setUserName(Context ctx, String userName) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();
-        mPrefsEditor.putString("userName", userName);
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.userName), userName);
         mPrefsEditor.apply();
     }
 
     //    User Profile methods User Name, Mobile Number, Pin Code
     public static String getDOB(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString("date_of_birth", "");
+        return mPrefs.getString(ctx.getResources().getString(R.string.date_of_birth), "");
     }
 
     public static void setDOB(Context ctx, String date_of_birth) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();
-        mPrefsEditor.putString("date_of_birth", date_of_birth);
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.date_of_birth), date_of_birth);
         mPrefsEditor.apply();
     }
 
     public static String getMobile(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString("userMobile", "");
+        return mPrefs.getString(ctx.getResources().getString(R.string.userMobile), "");
     }
 
     public static void setMobile(Context ctx, String mobile) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();
-        mPrefsEditor.putString("userMobile", mobile);
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.userMobile), mobile);
         mPrefsEditor.apply();
     }
 
     public static String getPin(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString("userPin", "");
+        return mPrefs.getString(ctx.getResources().getString(R.string.userPin), "");
     }
 
     public static void setPin(Context ctx, String pin) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();
-        mPrefsEditor.putString("userPin", pin);
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.userPin), pin);
         mPrefsEditor.apply();
     }
 
     public static String getVersionCode(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString("app_version", "1.2.5");
+        return mPrefs.getString(ctx.getResources().getString(R.string.app_version), "1.2.5");
     }
 
     public static void setVersionCode(Context ctx, String version) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();
-        mPrefsEditor.putString("app_version", version);
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.app_version), version);
         mPrefsEditor.apply();
     }
 
     public static String getProfileImage(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString("profileImg", "");
+        return mPrefs.getString(ctx.getResources().getString(R.string.profileImg), "");
     }
 
     public static void setProfileImage(Context ctx, String profileImage) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();
-        mPrefsEditor.putString("profileImg", profileImage);
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.profileImg), profileImage);
         mPrefsEditor.apply();
     }
 
     public static String getLastUsedDate(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString("lastDate", "");
+        return mPrefs.getString(ctx.getResources().getString(R.string.lastDate), "");
     }
 
     public static void setLastUsedDate(Context ctx, String lastUsedDate) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();
-        mPrefsEditor.putString("lastDate", lastUsedDate);
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.lastDate), lastUsedDate);
         mPrefsEditor.apply();
     }
 }

@@ -27,6 +27,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello Home fragment</string>
 
+<!--    Preference Keys -->
+    <string name="userName" translatable="false">userName</string>
+    <string name="date_of_birth" translatable="false">date_of_birth</string>
+    <string name="userMobile" translatable="false">userMobile</string>
+    <string name="userPin" translatable="false">userPin</string>
+    <string name="app_version" translatable="false">app_version</string>
+    <string name="profileImg" translatable="false">profileImg</string>
+    <string name="lastDate" translatable="false">lastDate</string>
 
 
 </resources>
