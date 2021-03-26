@@ -38,6 +38,4 @@
         android:layout_gravity="start"
         android:id="@+id/nav_View"/>
 
-
-
 </androidx.drawerlayout.widget.DrawerLayout>

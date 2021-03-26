@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragments.MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/monthlyMockTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/starndardMarginPadding"
+        android:layout_marginTop="8dp"
+        android:text="Monthly Mock Tests (100 Questions) - Free"/>
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Main Fragment" />
+        android:text="Important News Papers"
+        android:layout_marginTop="8dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/newsPapersRV"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#BAB5B5B5" />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/ncertBooksBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NCERT Books (Download)"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"/>
+
+
+
+
+
+
+
+</LinearLayout>

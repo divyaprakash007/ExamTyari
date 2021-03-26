@@ -27,14 +27,14 @@ import java.util.List;
 
 import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.R;
-import dp.ibps.generalawareness.Room.DAO.NotificationDB;
+import dp.ibps.generalawareness.Room.DAO.MainDAOClass;
 import dp.ibps.generalawareness.Room.Model.NotificationsModel;
 
 public class NotificationsActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private RecyclerView notificationRV;
     private ProgressDialog notiDialog;
-    private NotificationDB notificationDB;
+    private MainDAOClass notificationDB;
     private List<NotificationsModel> notiData;
     private String dbTableName = "NotificationsDB";
 
@@ -67,7 +67,7 @@ public class NotificationsActivity extends AppCompatActivity {
                         new Thread() {
                             @Override
                             public void run() {
-                                notificationDB = Room.databaseBuilder(NotificationsActivity.this, NotificationDB.class, dbTableName)
+                                notificationDB = Room.databaseBuilder(NotificationsActivity.this, MainDAOClass.class, dbTableName)
                                         .build();
                                 notificationDB.mainRoomDB().deleteAllNotifications();
                                 notiData.clear();
@@ -101,7 +101,7 @@ public class NotificationsActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
-                notificationDB = Room.databaseBuilder(NotificationsActivity.this, NotificationDB.class, dbTableName)
+                notificationDB = Room.databaseBuilder(NotificationsActivity.this, MainDAOClass.class, dbTableName)
                         .allowMainThreadQueries().build();
                 notiData = notificationDB.mainRoomDB().getNotifications();
             }

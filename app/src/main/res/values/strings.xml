@@ -29,6 +29,7 @@
 
     <!--    Preference Keys -->
     <string name="userName" translatable="false">userName</string>
+    <string name="baseUrl" translatable="false">baseUrl</string>
     <string name="date_of_birth" translatable="false">date_of_birth</string>
     <string name="userMobile" translatable="false">userMobile</string>
     <string name="userPin" translatable="false">userPin</string>

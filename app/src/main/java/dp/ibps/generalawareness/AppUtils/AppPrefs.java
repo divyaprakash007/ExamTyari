@@ -11,6 +11,19 @@ public class AppPrefs {
     private static SharedPreferences.Editor mPrefsEditor;
 
     //    User Profile methods User Name, Mobile Number, Pin Code
+    public static String getBaseUrl(Context ctx) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return mPrefs.getString(ctx.getResources().getString(R.string.userName), "Guest User");
+    }
+
+    public static void setBaseUrl(Context ctx, String baseUrl) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        mPrefsEditor = mPrefs.edit();
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.userName), baseUrl);
+        mPrefsEditor.apply();
+    }
+
+    //    User Profile methods User Name, Mobile Number, Pin Code
     public static String getUserName(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return mPrefs.getString(ctx.getResources().getString(R.string.userName), "Guest User");

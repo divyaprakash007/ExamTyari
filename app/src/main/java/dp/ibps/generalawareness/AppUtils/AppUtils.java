@@ -56,6 +56,21 @@ public class AppUtils {
         return dateFormat.format(date);
     }
 
+    public static void getBaseUrl(Context context){
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("metaData").document("AppDetails").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            AppPrefs.setBaseUrl(context, "" + task.getResult().get("base_url"));
+                        } else {
+                            Toast.makeText(context, "Something went wrong with Internet.", Toast.LENGTH_SHORT).show();
+                            AppUtils.sendErrorMessage(context, AppUtils.getTodayDate(), "Something wrong with baseUrl Fetching.", "", "HindiNCERTBooks Fragment");
+                        }
+                    }
+                });
+    }
+
     public static void checkVersionUpdate(Context context, boolean progressStatus) {
         ProgressDialog dialogStatus = new ProgressDialog(context);
         if (progressStatus) {
@@ -71,16 +86,19 @@ public class AppUtils {
                 if (dialogStatus.isShowing()) {
                     dialogStatus.dismiss();
                 }
+                if (AppPrefs.getBaseUrl(context).length() <= 0) {
+                    AppPrefs.setBaseUrl(context, "" + task.getResult().get("base_url"));
+                }
                 if (task.isSuccessful()) {
                     String versionName;
                     try {
                         PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
                         versionName = (pinfo.versionName).trim();
-                        AppPrefs.setLastUsedDate(context,AppUtils.getTodayDate());
-                        AppPrefs.setVersionCode(context,versionName);
+                        AppPrefs.setLastUsedDate(context, AppUtils.getTodayDate());
+                        AppPrefs.setVersionCode(context, versionName);
                     } catch (Exception e) {
                         versionName = (AppPrefs.getVersionCode(context)).trim();
-                        AppUtils.sendErrorMessage(context,AppUtils.getTodayDate(),e.getMessage(),"",""+context.getClass().getName());
+                        AppUtils.sendErrorMessage(context, AppUtils.getTodayDate(), e.getMessage(), "", "" + context.getClass().getName());
                     }
 
                     if (!versionName.equals("" + task.getResult().get("Version"))) {
