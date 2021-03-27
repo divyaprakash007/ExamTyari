@@ -1,5 +1,6 @@
 package dp.ibps.generalawareness.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,12 +22,9 @@ import java.util.List;
 
 import dp.ibps.generalawareness.Activity.WebViewActivity;
 import dp.ibps.generalawareness.AppUtils.AppConstant;
-import dp.ibps.generalawareness.AppUtils.AppPrefs;
-import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.R;
 import dp.ibps.generalawareness.Room.DAO.MainDAOClass;
 import dp.ibps.generalawareness.Room.Model.NCERTHindiModel;
-import dp.ibps.generalawareness.Room.Model.NotificationsModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,54 +41,64 @@ public class HindiNCERTBooks extends Fragment {
     private MainDAOClass mainDAOClass;
     private String dbTableName = "HindiNCERTDB";
     private List<NCERTHindiModel> ncertHindiModelsList;
+    private ProgressDialog dialog;
 
     private void initislise(View view) {
         hindiBooksRV = view.findViewById(R.id.hindiBooksRV);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         hindiBooksRV.setLayoutManager(linearLayoutManager);
-
+        dialog = new ProgressDialog(getContext());
+        dialog.setTitle(getResources().getString(R.string.title));
+        dialog.setMessage(getResources().getString(R.string.wait_message));
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     public class HindiNCERTAdapter extends RecyclerView.Adapter<HindiNCERTAdapter.HindiNCERTViewHolder> {
 
-        public HindiNCERTAdapter() {
+        private List<NCERTHindiModel> ncertHindiModelsList;
 
+        public HindiNCERTAdapter(List<NCERTHindiModel> ncertHindiModelsList) {
+            this.ncertHindiModelsList = ncertHindiModelsList;
         }
 
         @NonNull
         @Override
         public HindiNCERTViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_papers_view, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hindi_ncert_view, parent, false);
             HindiNCERTViewHolder holder = new HindiNCERTViewHolder(view);
             return holder;
         }
 
         @Override
         public void onBindViewHolder(@NonNull HindiNCERTViewHolder holder, int position) {
-            holder.newsPaperTV.setText("");
-            holder.newsPapersCardView.setOnClickListener(new View.OnClickListener() {
+            holder.titleTV.setText(ncertHindiModelsList.get(position).getBookName());
+            holder.classTV.setText(ncertHindiModelsList.get(position).getClassName());
+            holder.subjectTV.setText(ncertHindiModelsList.get(position).getSubName());
+
+            holder.hindiItemViewCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), WebViewActivity.class);
-                    intent.putExtra(AppConstant.webIntentKey, position + 2);
-                    startActivity(intent);
+                    // TODO: 27-03-2021 open pdf url in pdf view
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return 20;
+            return ncertHindiModelsList.size();
         }
 
         public class HindiNCERTViewHolder extends RecyclerView.ViewHolder {
-            public TextView newsPaperTV;
-            public CardView newsPapersCardView;
+            public TextView titleTV, classTV, subjectTV;
+            public CardView hindiItemViewCardView;
 
             public HindiNCERTViewHolder(@NonNull View itemView) {
                 super(itemView);
-                newsPaperTV = itemView.findViewById(R.id.newsPaperTV);
-                newsPapersCardView = itemView.findViewById(R.id.newsPapersCardView);
+                hindiItemViewCardView = itemView.findViewById(R.id.hindiItemViewCardView);
+                titleTV = itemView.findViewById(R.id.titleTV);
+                classTV = itemView.findViewById(R.id.classTV);
+                subjectTV = itemView.findViewById(R.id.subjectTV);
             }
         }
     }
@@ -135,22 +143,13 @@ public class HindiNCERTBooks extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hindi_n_c_e_r_t_books, container, false);
-        new HindiNCERTAsynkTask().execute();
-
         initislise(view);
-
-
-//        if (ncertHindiModelsList.size()<=0 ){
-//            // TODO: 26-03-2021 fetch data from server and save to local db (Using Retrofit)
-//
-//        } else {
-//            hindiBooksRV.setAdapter(new HindiNCERTAdapter());
-//        }
+        new getHindiDBNCERTAsynkTask().execute();
 
         return view;
     }
 
-    private class HindiNCERTAsynkTask extends AsyncTask<String, String, String> {
+    private class getHindiDBNCERTAsynkTask extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
@@ -168,7 +167,14 @@ public class HindiNCERTBooks extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.d(getTag(), "onPostExecute: List Size + " + ncertHindiModelsList.size());
+            if (ncertHindiModelsList.size() <= 0) {
+                // TODO: 27-03-2021 getData from Retrofit and save it to room db set Adapter to RV
+
+            } else {
+                hindiBooksRV.setAdapter(new HindiNCERTAdapter(ncertHindiModelsList));
+                dialog.dismiss();
+            }
+
         }
     }
 
