@@ -13,13 +13,13 @@ public class AppPrefs {
     //    User Profile methods User Name, Mobile Number, Pin Code
     public static String getBaseUrl(Context ctx) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return mPrefs.getString(ctx.getResources().getString(R.string.userName), "Guest User");
+        return mPrefs.getString(ctx.getResources().getString(R.string.baseUrl), "");
     }
 
     public static void setBaseUrl(Context ctx, String baseUrl) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();
-        mPrefsEditor.putString(ctx.getResources().getString(R.string.userName), baseUrl);
+        mPrefsEditor.putString(ctx.getResources().getString(R.string.baseUrl), baseUrl);
         mPrefsEditor.apply();
     }
 

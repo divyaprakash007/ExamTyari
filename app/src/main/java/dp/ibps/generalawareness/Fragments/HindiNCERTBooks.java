@@ -1,8 +1,6 @@
 package dp.ibps.generalawareness.Fragments;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,9 +8,6 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +15,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import dp.ibps.generalawareness.Activity.WebViewActivity;
-import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.R;
 import dp.ibps.generalawareness.Room.DAO.MainDAOClass;
 import dp.ibps.generalawareness.Room.Model.NCERTHindiModel;
@@ -40,7 +33,6 @@ public class HindiNCERTBooks extends Fragment {
     private RecyclerView hindiBooksRV;
     private MainDAOClass mainDAOClass;
     private String dbTableName = "HindiNCERTDB";
-    private List<NCERTHindiModel> ncertHindiModelsList;
     private ProgressDialog dialog;
 
     private void initislise(View view) {
@@ -52,6 +44,7 @@ public class HindiNCERTBooks extends Fragment {
         dialog.setMessage(getResources().getString(R.string.wait_message));
         dialog.setCancelable(false);
         dialog.show();
+
     }
 
     public class HindiNCERTAdapter extends RecyclerView.Adapter<HindiNCERTAdapter.HindiNCERTViewHolder> {
@@ -144,39 +137,11 @@ public class HindiNCERTBooks extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hindi_n_c_e_r_t_books, container, false);
         initislise(view);
-        new getHindiDBNCERTAsynkTask().execute();
+
 
         return view;
     }
 
-    private class getHindiDBNCERTAsynkTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            mainDAOClass = Room.databaseBuilder(getContext(), MainDAOClass.class, dbTableName)
-                    .build();
-            ncertHindiModelsList = mainDAOClass.mainRoomDB().getHindiNCERTDetails();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (ncertHindiModelsList.size() <= 0) {
-                // TODO: 27-03-2021 getData from Retrofit and save it to room db set Adapter to RV
-
-            } else {
-                hindiBooksRV.setAdapter(new HindiNCERTAdapter(ncertHindiModelsList));
-                dialog.dismiss();
-            }
-
-        }
-    }
 
 
 }
