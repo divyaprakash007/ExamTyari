@@ -56,21 +56,6 @@ public class AppUtils {
         return dateFormat.format(date);
     }
 
-    public static void getBaseUrl(Context context){
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("metaData").document("AppDetails").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            AppPrefs.setBaseUrl(context, "" + task.getResult().get("base_url"));
-                        } else {
-                            Toast.makeText(context, "Something went wrong with Internet.", Toast.LENGTH_SHORT).show();
-                            AppUtils.sendErrorMessage(context, AppUtils.getTodayDate(), "Something wrong with baseUrl Fetching.", "", "HindiNCERTBooks Fragment");
-                        }
-                    }
-                });
-    }
-
     public static void checkVersionUpdate(Context context, boolean progressStatus) {
         ProgressDialog dialogStatus = new ProgressDialog(context);
         if (progressStatus) {
@@ -85,9 +70,6 @@ public class AppUtils {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (dialogStatus.isShowing()) {
                     dialogStatus.dismiss();
-                }
-                if (AppPrefs.getBaseUrl(context).length() <= 0) {
-                    AppPrefs.setBaseUrl(context, "" + task.getResult().get("base_url"));
                 }
                 if (task.isSuccessful()) {
                     String versionName;

@@ -29,4 +29,6 @@ public interface MainRoomDB {
     @Query("DELETE FROM NCERTHindiModel")
     public void deleteAllHindiNCERT();
 
+
+
 }
