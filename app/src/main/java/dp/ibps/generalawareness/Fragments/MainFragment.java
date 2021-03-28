@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.DataOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dp.ibps.generalawareness.Activity.NCERTActivity;
 import dp.ibps.generalawareness.Activity.NotificationsActivity;
@@ -43,37 +48,43 @@ public class MainFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView newsPapersRV;
     private Button ncertBooksBtn;
-    private Button deleteDB;
+    private Button weeklyTestBtn;
+    private static final String TAG = "MainFragment";
 
     private void initialise(View view) {
         newsPapersRV = view.findViewById(R.id.newsPapersRV);
         ncertBooksBtn = view.findViewById(R.id.ncertBooksBtn);
-        deleteDB = view.findViewById(R.id.deleteDB);
+        weeklyTestBtn = view.findViewById(R.id.weeklyTestBtn);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         newsPapersRV.setLayoutManager(linearLayoutManager);
         newsPapersRV.setAdapter(new NewsPapersAdapter());
 
-//        temp button for testing the NCERT db files. will be removed after successful testing
-        deleteDB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainDAOClass mainDAOClassEn = Room.databaseBuilder(getContext(), MainDAOClass.class, AppConstant.englishNCERT)
-                        .allowMainThreadQueries().build();
-                mainDAOClassEn.mainRoomDB().deleteAllEnglishNCERT();
-
-                MainDAOClass mainDAOClassHi = Room.databaseBuilder(getContext(), MainDAOClass.class, AppConstant.hindiNCERT)
-                        .allowMainThreadQueries().build();
-                mainDAOClassEn.mainRoomDB().deleteAllHindiNCERT();
-                Toast.makeText(getContext(), "All NCERT DB Clear", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
         ncertBooksBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), NCERTActivity.class));
+            }
+        });
+
+        weeklyTestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 28-03-2021 connect with weekly mock test firebase firestore db
+                // TODO: 28-03-2021  also save the db in roomdb and assign datewise
+
+                SimpleDateFormat myFormat = new SimpleDateFormat("dd-MMM");
+                String inputString1 = "23-Feb";
+                String inputString2 = "22-March";
+
+                try {
+                    Date date1 = myFormat.parse(inputString1);
+                    Date date2 = myFormat.parse(inputString2);
+                    long diff = date2.getTime() - date1.getTime();
+                    Log.d(TAG, "onClick: difference between two date : " + (int) (diff / (1000 * 60 * 60 * 24)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -113,6 +124,7 @@ public class MainFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
