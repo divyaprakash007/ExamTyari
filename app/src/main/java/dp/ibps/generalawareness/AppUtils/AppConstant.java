@@ -16,8 +16,8 @@ public class AppConstant {
             "The world is a better place because you are in it, dear student. You will definitely leave your mark on it. Happy birthday!",
             "Birthdays are natures way of telling us to eat more cake. Happy Birthday"};
 
-    public static List<NCERTHindiModel> ncertHindiModels;
-    public static List<NCERTEnglishModel> ncertEnglishModels;
+    public static List<NCERTHindiModel> ncertHindiList;
+    public static List<NCERTEnglishModel> ncertEnglishList;
     public static String hindiNCERT = "hindiNCERT";
     public static String englishNCERT = "englishNCERT";
 

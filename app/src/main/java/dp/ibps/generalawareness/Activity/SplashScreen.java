@@ -48,14 +48,14 @@ public class SplashScreen extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AppConstant.ncertHindiModels = Room.databaseBuilder(SplashScreen.this, MainDAOClass.class, AppConstant.hindiNCERT)
+                AppConstant.ncertHindiList = Room.databaseBuilder(SplashScreen.this, MainDAOClass.class, AppConstant.hindiNCERT)
                         .build().mainRoomDB().getHindiNCERTDetails();
-                AppConstant.ncertEnglishModels = Room.databaseBuilder(SplashScreen.this, MainDAOClass.class, AppConstant.englishNCERT)
+                AppConstant.ncertEnglishList = Room.databaseBuilder(SplashScreen.this, MainDAOClass.class, AppConstant.englishNCERT)
                         .build().mainRoomDB().getEnglishNCERTDetails();
 
                 Log.d(TAG, "run: Splash Screen getting size of the list Hindi " +
-                        AppConstant.ncertHindiModels.size() +
-                        " List size Englih : " + AppConstant.ncertEnglishModels.size());
+                        AppConstant.ncertHindiList.size() +
+                        " List size Englih : " + AppConstant.ncertEnglishList.size());
             }
         }).start();
 

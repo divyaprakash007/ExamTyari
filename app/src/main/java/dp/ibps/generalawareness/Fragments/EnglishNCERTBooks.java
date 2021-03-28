@@ -1,13 +1,23 @@
 package dp.ibps.generalawareness.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.google.api.Distribution;
+
+import dp.ibps.generalawareness.Activity.NotificationsActivity;
+import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.R;
 
 /**
@@ -16,6 +26,7 @@ import dp.ibps.generalawareness.R;
  * create an instance of this fragment.
  */
 public class EnglishNCERTBooks extends Fragment {
+    private RecyclerView engNCERTRV;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,7 +73,64 @@ public class EnglishNCERTBooks extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_english_n_c_e_r_t_books, container, false);
-
+        initialise(view);
         return view;
     }
+
+    private void initialise(View view) {
+        engNCERTRV = view.findViewById(R.id.engNCERTRV);
+        engNCERTRV.setLayoutManager(new LinearLayoutManager(getContext()));
+        engNCERTRV.setAdapter(new NCERTEngAdapter(getContext()));
+
+    }
+
+    public class NCERTEngAdapter extends RecyclerView.Adapter<NCERTEngAdapter.NotificationViewHolder> {
+
+        private Context context;
+
+        public NCERTEngAdapter(Context context) {
+            this.context = context;
+        }
+
+        @NonNull
+        @Override
+        public NCERTEngAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ncert_books_view, parent, false);
+            NCERTEngAdapter.NotificationViewHolder holder = new NCERTEngAdapter.NotificationViewHolder(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull NCERTEngAdapter.NotificationViewHolder holder, int position) {
+            holder.titleTV.setText(AppConstant.ncertEnglishList.get(position).getBookName());
+            holder.classTV.setText(AppConstant.ncertEnglishList.get(position).getClassName());
+            holder.subjectTV.setText(AppConstant.ncertEnglishList.get(position).getSubName());
+            holder.hindiItemViewCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: 28-03-2021 open pdf url into new screen
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return AppConstant.ncertEnglishList.size();
+        }
+
+        public class NotificationViewHolder extends RecyclerView.ViewHolder {
+
+            private TextView titleTV, classTV, subjectTV;
+            private CardView hindiItemViewCardView;
+
+            public NotificationViewHolder(@NonNull View itemView) {
+                super(itemView);
+                titleTV = itemView.findViewById(R.id.titleTV);
+                classTV = itemView.findViewById(R.id.classTV);
+                subjectTV = itemView.findViewById(R.id.subjectTV);
+                hindiItemViewCardView = itemView.findViewById(R.id.hindiItemViewCardView);
+            }
+        }
+    }
+
 }

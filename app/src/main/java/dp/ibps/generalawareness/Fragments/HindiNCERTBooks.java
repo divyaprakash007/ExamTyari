@@ -46,54 +46,6 @@ public class HindiNCERTBooks extends Fragment {
 
     }
 
-    public class HindiNCERTAdapter extends RecyclerView.Adapter<HindiNCERTAdapter.HindiNCERTViewHolder> {
-
-        private List<NCERTHindiModel> ncertHindiModelsList;
-
-        public HindiNCERTAdapter(List<NCERTHindiModel> ncertHindiModelsList) {
-            this.ncertHindiModelsList = ncertHindiModelsList;
-        }
-
-        @NonNull
-        @Override
-        public HindiNCERTViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hindi_ncert_view, parent, false);
-            HindiNCERTViewHolder holder = new HindiNCERTViewHolder(view);
-            return holder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull HindiNCERTViewHolder holder, int position) {
-            holder.titleTV.setText(ncertHindiModelsList.get(position).getBookName());
-            holder.classTV.setText(ncertHindiModelsList.get(position).getClassName());
-            holder.subjectTV.setText(ncertHindiModelsList.get(position).getSubName());
-
-            holder.hindiItemViewCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO: 27-03-2021 open pdf url in pdf view
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return ncertHindiModelsList.size();
-        }
-
-        public class HindiNCERTViewHolder extends RecyclerView.ViewHolder {
-            public TextView titleTV, classTV, subjectTV;
-            public CardView hindiItemViewCardView;
-
-            public HindiNCERTViewHolder(@NonNull View itemView) {
-                super(itemView);
-                hindiItemViewCardView = itemView.findViewById(R.id.hindiItemViewCardView);
-                titleTV = itemView.findViewById(R.id.titleTV);
-                classTV = itemView.findViewById(R.id.classTV);
-                subjectTV = itemView.findViewById(R.id.subjectTV);
-            }
-        }
-    }
 
     // TODO: Rename and change types of parameters
     private String mParam1;
