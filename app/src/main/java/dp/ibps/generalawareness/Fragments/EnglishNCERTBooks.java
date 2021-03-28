@@ -1,6 +1,10 @@
 package dp.ibps.generalawareness.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,9 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.api.Distribution;
-
-import dp.ibps.generalawareness.Activity.NotificationsActivity;
 import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.R;
 
@@ -84,7 +85,7 @@ public class EnglishNCERTBooks extends Fragment {
 
     }
 
-    public class NCERTEngAdapter extends RecyclerView.Adapter<NCERTEngAdapter.NotificationViewHolder> {
+    public class NCERTEngAdapter extends RecyclerView.Adapter<NCERTEngAdapter.EnglishViewHolder> {
 
         private Context context;
 
@@ -94,21 +95,38 @@ public class EnglishNCERTBooks extends Fragment {
 
         @NonNull
         @Override
-        public NCERTEngAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public EnglishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ncert_books_view, parent, false);
-            NCERTEngAdapter.NotificationViewHolder holder = new NCERTEngAdapter.NotificationViewHolder(view);
+            EnglishViewHolder holder = new EnglishViewHolder(view);
             return holder;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull NCERTEngAdapter.NotificationViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull EnglishViewHolder holder, int position) {
             holder.titleTV.setText(AppConstant.ncertEnglishList.get(position).getBookName());
             holder.classTV.setText(AppConstant.ncertEnglishList.get(position).getClassName());
             holder.subjectTV.setText(AppConstant.ncertEnglishList.get(position).getSubName());
             holder.hindiItemViewCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: 28-03-2021 open pdf url into new screen
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setCancelable(false);
+                    builder.setMessage("Download process will take some time according to internet speed.");
+                    builder.setTitle("Start Download");
+                    builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstant.ncertEnglishList.get(position).getLinkUrl()));
+                            startActivity(browserIntent);
+                            dialog.dismiss();
+                        }
+                    }).setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
                 }
             });
         }
@@ -118,12 +136,12 @@ public class EnglishNCERTBooks extends Fragment {
             return AppConstant.ncertEnglishList.size();
         }
 
-        public class NotificationViewHolder extends RecyclerView.ViewHolder {
+        public class EnglishViewHolder extends RecyclerView.ViewHolder {
 
             private TextView titleTV, classTV, subjectTV;
             private CardView hindiItemViewCardView;
 
-            public NotificationViewHolder(@NonNull View itemView) {
+            public EnglishViewHolder(@NonNull View itemView) {
                 super(itemView);
                 titleTV = itemView.findViewById(R.id.titleTV);
                 classTV = itemView.findViewById(R.id.classTV);

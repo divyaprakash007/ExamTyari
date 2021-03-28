@@ -1,12 +1,19 @@
 package dp.ibps.generalawareness.Fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +21,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.R;
 import dp.ibps.generalawareness.Room.DAO.MainDAOClass;
 import dp.ibps.generalawareness.Room.Model.NCERTHindiModel;
@@ -29,23 +37,7 @@ public class HindiNCERTBooks extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private RecyclerView hindiBooksRV;
-    private MainDAOClass mainDAOClass;
-    private String dbTableName = "HindiNCERTDB";
-    private ProgressDialog dialog;
-
-    private void initislise(View view) {
-//        hindiBooksRV = view.findViewById(R.id.hindiBooksRV);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-//        hindiBooksRV.setLayoutManager(linearLayoutManager);
-        dialog = new ProgressDialog(getContext());
-        dialog.setTitle(getResources().getString(R.string.title));
-        dialog.setMessage(getResources().getString(R.string.wait_message));
-        dialog.setCancelable(false);
-//        dialog.show();
-
-    }
-
+    private RecyclerView hindiNCERTRV;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -93,6 +85,80 @@ public class HindiNCERTBooks extends Fragment {
         return view;
     }
 
+    private void initislise(View view) {
+        hindiNCERTRV = view.findViewById(R.id.hindiNCERTRV);
+        hindiNCERTRV.setLayoutManager(new LinearLayoutManager(getContext()));
+        hindiNCERTRV.setAdapter(new NCERTHindiAdapter(getContext()));
+
+
+    }
+
+    public class NCERTHindiAdapter extends RecyclerView.Adapter<NCERTHindiAdapter.NCERTHindiView> {
+
+        private Context context;
+
+        public NCERTHindiAdapter(Context context) {
+            this.context = context;
+        }
+
+        @NonNull
+        @Override
+        public NCERTHindiAdapter.NCERTHindiView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ncert_books_view, parent, false);
+            NCERTHindiAdapter.NCERTHindiView holder = new NCERTHindiAdapter.NCERTHindiView(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull NCERTHindiAdapter.NCERTHindiView holder, int position) {
+            holder.titleTV.setText(AppConstant.ncertHindiList.get(position).getBookName());
+            holder.classTV.setText(AppConstant.ncertHindiList.get(position).getClassName());
+            holder.subjectTV.setText(AppConstant.ncertHindiList.get(position).getSubName());
+            holder.hindiItemViewCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setCancelable(false);
+                    builder.setMessage("Download process will take some time according to internet speed.");
+                    builder.setTitle("Start Download");
+                    builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstant.ncertHindiList.get(position).getLinkUrl()));
+                            startActivity(browserIntent);
+                            dialog.dismiss();
+                        }
+                    }).setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return AppConstant.ncertHindiList.size();
+        }
+
+        public class NCERTHindiView extends RecyclerView.ViewHolder {
+
+            private TextView titleTV, classTV, subjectTV;
+            private CardView hindiItemViewCardView;
+
+            public NCERTHindiView(@NonNull View itemView) {
+                super(itemView);
+                titleTV = itemView.findViewById(R.id.titleTV);
+                classTV = itemView.findViewById(R.id.classTV);
+                subjectTV = itemView.findViewById(R.id.subjectTV);
+                hindiItemViewCardView = itemView.findViewById(R.id.hindiItemViewCardView);
+            }
+        }
+    }
 
 
 }
