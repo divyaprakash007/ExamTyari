@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import java.util.List;
 
+import dp.ibps.generalawareness.Room.Model.NCERTEnglishModel;
 import dp.ibps.generalawareness.Room.Model.NCERTHindiModel;
 import dp.ibps.generalawareness.Room.Model.NotificationsModel;
 
@@ -28,6 +29,16 @@ public interface MainRoomDB {
 
     @Query("DELETE FROM NCERTHindiModel")
     public void deleteAllHindiNCERT();
+
+    @Insert
+    public void englishBooksDetailsInsert(NCERTEnglishModel ncertEnglishModel);
+
+    @Query("Select * from NCERTEnglishModel")
+    List<NCERTEnglishModel> getEnglishNCERTDetails();
+
+    @Query("DELETE FROM NCERTEnglishModel")
+    public void deleteAllEnglishNCERT();
+
 
 
 

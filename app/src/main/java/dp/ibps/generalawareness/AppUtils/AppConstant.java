@@ -1,12 +1,9 @@
 package dp.ibps.generalawareness.AppUtils;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
+import java.util.List;
 
-import java.net.InetAddress;
-import java.util.Random;
-
-import static androidx.core.content.ContextCompat.getSystemService;
+import dp.ibps.generalawareness.Room.Model.NCERTEnglishModel;
+import dp.ibps.generalawareness.Room.Model.NCERTHindiModel;
 
 public class AppConstant {
 
@@ -18,5 +15,8 @@ public class AppConstant {
             "I hope that 4 every candle on your cake you get a wonderful surprise.. Happy birthday.",
             "The world is a better place because you are in it, dear student. You will definitely leave your mark on it. Happy birthday!",
             "Birthdays are natures way of telling us to eat more cake. Happy Birthday"};
+
+    public static List<NCERTHindiModel> ncertHindiModels;
+    public static List<NCERTEnglishModel> ncertEnglishModels;
 
 }

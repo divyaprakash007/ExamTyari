@@ -2,17 +2,18 @@ package dp.ibps.generalawareness.Room.Model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
 @Entity
-public class NCERTHindiModel {
+public class NCERTEnglishModel {
 
     @PrimaryKey(autoGenerate = true)
-    public int hiBookID;
+    public int enBookID;
     String className;
     String bookName;
     String subName;
     String linkUrl;
 
-    public NCERTHindiModel(String className, String bookName, String subName, String linkUrl) {
+    public NCERTEnglishModel(String className, String bookName, String subName, String linkUrl) {
         this.className = className;
         this.bookName = bookName;
         this.subName = subName;
@@ -20,11 +21,11 @@ public class NCERTHindiModel {
     }
 
     public int getHiBookID() {
-        return hiBookID;
+        return enBookID;
     }
 
     public void setHiBookID(int hiBookID) {
-        this.hiBookID = hiBookID;
+        this.enBookID = hiBookID;
     }
 
     public String getClassName() {

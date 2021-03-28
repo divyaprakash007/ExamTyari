@@ -1,28 +1,28 @@
 package dp.ibps.generalawareness.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.AppUtils.AppPrefs;
 import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.R;
+import dp.ibps.generalawareness.Room.DAO.MainDAOClass;
 
 public class SplashScreen extends AppCompatActivity {
     private TextView taglineTV;
@@ -41,6 +41,16 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 mFirebaseAnalytics = FirebaseAnalytics.getInstance(SplashScreen.this);
+            }
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppConstant.ncertHindiModels = Room.databaseBuilder(SplashScreen.this, MainDAOClass.class, "hindiNCERT")
+                       .build().mainRoomDB().getHindiNCERTDetails();
+                AppConstant.ncertEnglishModels = Room.databaseBuilder(SplashScreen.this, MainDAOClass.class, "englishNCERT")
+                       .build().mainRoomDB().getEnglishNCERTDetails();
             }
         }).start();
 
@@ -104,7 +114,7 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 startActivity(intent);
             }
-        }, 2500);
+        }, 3000);
     }
 
     @Override
