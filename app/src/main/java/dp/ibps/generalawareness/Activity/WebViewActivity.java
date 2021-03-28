@@ -55,6 +55,10 @@ public class WebViewActivity extends AppCompatActivity {
                 url = "https://www.hindustantimes.com/";
                 pageTitle = "Hindustan Times";
                 break;
+            case 7:
+                url = "http://newsonair.com/hindi/Hindi-Default.aspx";
+                pageTitle = "Current Updates";
+                break;
         }
         getSupportActionBar().setTitle(pageTitle);
         if (AppUtils.isNetworkAvailable(WebViewActivity.this)) {

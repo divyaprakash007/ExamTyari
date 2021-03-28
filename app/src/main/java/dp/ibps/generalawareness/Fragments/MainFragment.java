@@ -27,12 +27,19 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.DataOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import dp.ibps.generalawareness.Activity.NCERTActivity;
@@ -62,6 +69,7 @@ public class MainFragment extends Fragment {
     private Button topHeadlinesButton;
     private AdView adView1;
     private ProgressDialog dialog;
+    private FirebaseFirestore db;
     private static final String TAG = "MainFragment";
 
     private void initialise(View view) {
@@ -76,17 +84,11 @@ public class MainFragment extends Fragment {
 
         MobileAds.initialize(getContext());
         AdView adView = new AdView(getContext());
-
         adView.setAdSize(AdSize.BANNER);
-
         adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        dialog.setCancelable(false);
-        dialog.setTitle("Loading...");
-//        dialog.show();
         MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
-                dialog.dismiss();
             }
         });
 
@@ -96,12 +98,13 @@ public class MainFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         newsPapersRV.setLayoutManager(linearLayoutManager);
         newsPapersRV.setAdapter(new NewsPapersAdapter());
-
+        db = FirebaseFirestore.getInstance();
         topHeadlinesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 28-03-2021 getnews from fb db and save it to local db for in case of Crash
-
+                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra(AppConstant.webIntentKey, 7);
+                startActivity(intent);
             }
         });
 
@@ -194,7 +197,6 @@ public class MainFragment extends Fragment {
         initialise(view);
         return view;
     }
-
 
     public class NewsPapersAdapter extends RecyclerView.Adapter<NewsPapersAdapter.NewsPapersViewHolder> {
 

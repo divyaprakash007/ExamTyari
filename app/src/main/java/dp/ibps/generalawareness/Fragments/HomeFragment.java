@@ -75,9 +75,9 @@ public class HomeFragment extends Fragment {
                             case R.id.navigation_home:
                                 openFragment(MainFragment.newInstance("", ""));
                                 return true;
-                            case R.id.navigation_audio:
-                                openFragment(AudioFragment.newInstance("", ""));
-                                return true;
+//                            case R.id.navigation_audio:
+//                            openFragment(AudioFragment.newInstance("", ""));
+//                            return true;
                             case R.id.navigation_mocktest:
                                 openFragment(MockTestFragment.newInstance("", ""));
                                 return true;
