@@ -10,6 +10,13 @@ public class AppPrefs {
     private static SharedPreferences mPrefs;
     private static SharedPreferences.Editor mPrefsEditor;
 
+
+    //    User Profile methods User Name, Mobile Number, Pin Code
+    public static String getUserName(Context ctx) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return mPrefs.getString(ctx.getResources().getString(R.string.userName), "Guest User");
+    }
+
     public static void setUserName(Context ctx, String userName) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         mPrefsEditor = mPrefs.edit();

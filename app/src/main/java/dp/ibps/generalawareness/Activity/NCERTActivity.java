@@ -1,5 +1,7 @@
 package dp.ibps.generalawareness.Activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,6 +17,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.Fragments.EnglishNCERTBooks;
@@ -35,41 +40,54 @@ public class NCERTActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
-        tabLayout.addTab(tabLayout.newTab().setText("English"));
-        tabLayout.addTab(tabLayout.newTab().setText("हिंदी"));
+        MainAdapter adapter = new MainAdapter(getSupportFragmentManager());
+        adapter.addFragment(new HindiNCERTBooks(), "हिंदी");
+        adapter.addFragment(new EnglishNCERTBooks(), "English");
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(0);
 
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        viewPager.setAdapter(new MyAdapter(getSupportFragmentManager(),
-                tabLayout.getTabCount()));
+//        tabLayout.addTab(tabLayout.newTab().setText("English"));
+//        tabLayout.addTab(tabLayout.newTab().setText("हिंदी"));
+//
+//        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+//
+//        viewPager.setAdapter(new MyAdapter(getSupportFragmentManager(),
+//                2));
+//        viewPager.setCurrentItem(0);
 
     }
 
-    class MyAdapter extends FragmentPagerAdapter {
-        int totalTabs;
+    class MainAdapter extends FragmentPagerAdapter {
+        private ArrayList<String> arrayList = new ArrayList<>();
+        List<Fragment> fragmentList = new ArrayList<>();
 
-        public MyAdapter(FragmentManager fm, int totalTabs) {
-            super(fm);
-            this.totalTabs = totalTabs;
+        public void addFragment(Fragment fragment, String title) {
+            arrayList.add(title);
+            fragmentList.add(fragment);
         }
 
+        public MainAdapter(@NonNull FragmentManager fm) {
+            super(fm);
+
+        }
+
+        @NonNull
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    HindiNCERTBooks hindiNCERTBooks = new HindiNCERTBooks();
-                    return hindiNCERTBooks;
-                case 1:
-                    EnglishNCERTBooks englishNCERTBooks = new EnglishNCERTBooks();
-                    return englishNCERTBooks;
-                default:
-                    return null;
-            }
+            return fragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return totalTabs;
+            return 2;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return arrayList.get(position);
         }
     }
 
@@ -85,7 +103,7 @@ public class NCERTActivity extends AppCompatActivity {
                 dialog.setCancelable(false);
                 dialog.setTitle("Refreshing");
                 dialog.setMessage(getResources().getString(R.string.wait_message));
-                dialog.show();
+//                dialog.show();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

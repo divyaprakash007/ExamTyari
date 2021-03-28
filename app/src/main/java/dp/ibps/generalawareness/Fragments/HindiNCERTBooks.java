@@ -36,14 +36,14 @@ public class HindiNCERTBooks extends Fragment {
     private ProgressDialog dialog;
 
     private void initislise(View view) {
-        hindiBooksRV = view.findViewById(R.id.hindiBooksRV);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        hindiBooksRV.setLayoutManager(linearLayoutManager);
+//        hindiBooksRV = view.findViewById(R.id.hindiBooksRV);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//        hindiBooksRV.setLayoutManager(linearLayoutManager);
         dialog = new ProgressDialog(getContext());
         dialog.setTitle(getResources().getString(R.string.title));
         dialog.setMessage(getResources().getString(R.string.wait_message));
         dialog.setCancelable(false);
-        dialog.show();
+//        dialog.show();
 
     }
 
