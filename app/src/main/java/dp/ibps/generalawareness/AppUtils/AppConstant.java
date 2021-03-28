@@ -18,5 +18,7 @@ public class AppConstant {
 
     public static List<NCERTHindiModel> ncertHindiModels;
     public static List<NCERTEnglishModel> ncertEnglishModels;
+    public static String hindiNCERT = "hindiNCERT";
+    public static String englishNCERT = "englishNCERT";
 
 }

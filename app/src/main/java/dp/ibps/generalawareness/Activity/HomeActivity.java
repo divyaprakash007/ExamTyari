@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Room;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
@@ -42,6 +44,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -64,6 +68,10 @@ import dp.ibps.generalawareness.AppUtils.AppPrefs;
 import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.Fragments.HomeFragment;
 import dp.ibps.generalawareness.R;
+import dp.ibps.generalawareness.Room.DAO.MainDAOClass;
+import dp.ibps.generalawareness.Room.Model.NCERTEnglishModel;
+import dp.ibps.generalawareness.Room.Model.NCERTHindiModel;
+import dp.ibps.generalawareness.Room.Model.NotificationsModel;
 import okhttp3.internal.Version;
 
 public class HomeActivity extends AppCompatActivity {
@@ -314,12 +322,81 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (AppConstant.ncertHindiModels.size()<=0){
-
-        } else if (AppConstant.ncertHindiModels.size()<=0){
-
+        if (AppConstant.ncertHindiModels.size() <= 0) {
+            getNCERTDBSavetoRoom(AppConstant.hindiNCERT);
+        } else if (AppConstant.ncertEnglishModels.size() <= 0) {
+            getNCERTDBSavetoRoom(AppConstant.englishNCERT);
         } else {
-
+            Log.d(TAG, "onResume: List sizes are from room db " + AppConstant.ncertEnglishModels.size() + " " + AppConstant.ncertHindiModels.size());
         }
     }
+
+    private void getNCERTDBSavetoRoom(String tableName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(tableName).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots.isEmpty()) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            onResume();
+                        }
+                    }, 1000);
+                } else {
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            Looper.prepare();
+                            MainDAOClass mainDAOClass = Room.databaseBuilder(HomeActivity.this, MainDAOClass.class, tableName)
+                                    .build();
+                            if (tableName.equals(AppConstant.hindiNCERT)) {
+                                mainDAOClass.mainRoomDB().deleteAllHindiNCERT();
+                                AppConstant.ncertHindiModels.clear();
+                                for (int i = 0; i < queryDocumentSnapshots.getDocuments().size(); i++) {
+                                    NCERTHindiModel ncertHindiModel = new NCERTHindiModel("" + queryDocumentSnapshots.getDocuments().get(i).get("class"),
+                                            "" + queryDocumentSnapshots.getDocuments().get(i).get("bookName"),
+                                            "" + queryDocumentSnapshots.getDocuments().get(i).get("sub"),
+                                            "" + queryDocumentSnapshots.getDocuments().get(i).get("url"));
+                                    mainDAOClass.mainRoomDB().hindiBooksDetailsInsert(ncertHindiModel);
+                                    AppConstant.ncertHindiModels.add(ncertHindiModel);
+                                }
+
+                            } else {
+                                mainDAOClass.mainRoomDB().deleteAllEnglishNCERT();
+                                AppConstant.ncertEnglishModels.clear();
+                                for (int i = 0; i < queryDocumentSnapshots.getDocuments().size(); i++) {
+                                    NCERTEnglishModel ncertEnglishModel = new NCERTEnglishModel("" + queryDocumentSnapshots.getDocuments().get(i).get("class"),
+                                            "" + queryDocumentSnapshots.getDocuments().get(i).get("bookName"),
+                                            "" + queryDocumentSnapshots.getDocuments().get(i).get("sub"),
+                                            "" + queryDocumentSnapshots.getDocuments().get(i).get("url"));
+                                    mainDAOClass.mainRoomDB().englishBooksDetailsInsert(ncertEnglishModel);
+                                    AppConstant.ncertEnglishModels.add(ncertEnglishModel);
+                                }
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onResume();
+                                }
+                            });
+                        }
+                    }.start();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                AppUtils.sendErrorMessage(HomeActivity.this, AppUtils.getTodayDate(), e.getMessage(), "", "HomeActivity");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onResume();
+                    }
+                }, 1000);
+
+            }
+        });
+    }
 }
+

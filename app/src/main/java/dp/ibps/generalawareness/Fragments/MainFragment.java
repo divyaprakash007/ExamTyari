@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.DataOutputStream;
 import java.util.List;
 
 import dp.ibps.generalawareness.Activity.NCERTActivity;
@@ -25,6 +27,7 @@ import dp.ibps.generalawareness.Activity.WebViewActivity;
 import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.AppUtils.AppUtils;
 import dp.ibps.generalawareness.R;
+import dp.ibps.generalawareness.Room.DAO.MainDAOClass;
 import dp.ibps.generalawareness.Room.Model.NotificationsModel;
 
 /**
@@ -40,14 +43,31 @@ public class MainFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView newsPapersRV;
     private Button ncertBooksBtn;
+    private Button deleteDB;
 
     private void initialise(View view) {
         newsPapersRV = view.findViewById(R.id.newsPapersRV);
         ncertBooksBtn = view.findViewById(R.id.ncertBooksBtn);
+        deleteDB = view.findViewById(R.id.deleteDB);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         newsPapersRV.setLayoutManager(linearLayoutManager);
         newsPapersRV.setAdapter(new NewsPapersAdapter());
+
+//        temp button for testing the NCERT db files. will be removed after successful testing
+        deleteDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainDAOClass mainDAOClassEn = Room.databaseBuilder(getContext(), MainDAOClass.class, AppConstant.englishNCERT)
+                        .allowMainThreadQueries().build();
+                mainDAOClassEn.mainRoomDB().deleteAllEnglishNCERT();
+
+                MainDAOClass mainDAOClassHi = Room.databaseBuilder(getContext(), MainDAOClass.class, AppConstant.hindiNCERT)
+                        .allowMainThreadQueries().build();
+                mainDAOClassEn.mainRoomDB().deleteAllHindiNCERT();
+                Toast.makeText(getContext(), "All NCERT DB Clear", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         ncertBooksBtn.setOnClickListener(new View.OnClickListener() {
