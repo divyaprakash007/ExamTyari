@@ -61,6 +61,8 @@ public class EnglishNCERTBooks extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_english_n_c_e_r_t_books, container, false);
+        View view = inflater.inflate(R.layout.fragment_english_n_c_e_r_t_books, container, false);
+
+        return view;
     }
 }

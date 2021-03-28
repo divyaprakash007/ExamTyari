@@ -47,7 +47,6 @@ public class NCERTActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(0);
 
-
 //        tabLayout.addTab(tabLayout.newTab().setText("English"));
 //        tabLayout.addTab(tabLayout.newTab().setText("हिंदी"));
 //
