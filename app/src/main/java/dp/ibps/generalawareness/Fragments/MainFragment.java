@@ -1,5 +1,7 @@
 package dp.ibps.generalawareness.Fragments;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.io.DataOutputStream;
 import java.text.ParseException;
@@ -49,16 +58,66 @@ public class MainFragment extends Fragment {
     private RecyclerView newsPapersRV;
     private Button ncertBooksBtn;
     private Button weeklyTestBtn;
+    private TextView dailyVocabTV, monthlyVocabTV;
+    private Button topHeadlinesButton;
+    private AdView adView1;
+    private ProgressDialog dialog;
     private static final String TAG = "MainFragment";
 
     private void initialise(View view) {
+        dialog = new ProgressDialog(getContext());
         newsPapersRV = view.findViewById(R.id.newsPapersRV);
         ncertBooksBtn = view.findViewById(R.id.ncertBooksBtn);
         weeklyTestBtn = view.findViewById(R.id.weeklyTestBtn);
+        monthlyVocabTV = view.findViewById(R.id.monthlyVocabTV);
+        dailyVocabTV = view.findViewById(R.id.dailyVocabTV);
+        topHeadlinesButton = view.findViewById(R.id.topHeadlinesButton);
+        adView1 = view.findViewById(R.id.adView);
+
+        MobileAds.initialize(getContext());
+        AdView adView = new AdView(getContext());
+
+        adView.setAdSize(AdSize.BANNER);
+
+        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        dialog.setCancelable(false);
+        dialog.setTitle("Loading...");
+//        dialog.show();
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                dialog.dismiss();
+            }
+        });
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView1.loadAd(adRequest);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         newsPapersRV.setLayoutManager(linearLayoutManager);
         newsPapersRV.setAdapter(new NewsPapersAdapter());
+
+        topHeadlinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 28-03-2021 getnews from fb db and save it to local db for in case of Crash
+
+            }
+        });
+
+        monthlyVocabTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 28-03-2021 get monthly vocabulary db and save it to local db
+            }
+        });
+
+        dailyVocabTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 28-03-2021 open daily vocabulary list from fb db and save it to local db
+            }
+        });
 
         ncertBooksBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +141,7 @@ public class MainFragment extends Fragment {
                     Date date2 = myFormat.parse(inputString2);
                     long diff = date2.getTime() - date1.getTime();
                     Log.d(TAG, "onClick: difference between two date : " + (int) (diff / (1000 * 60 * 60 * 24)));
+                    // TODO: 28-03-2021 days differnece tested okay
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

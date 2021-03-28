@@ -3,9 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".Fragments.MainFragment">
 
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+    </com.google.android.gms.ads.AdView>
     <Button
         android:id="@+id/monthlyMockTest"
         android:layout_width="match_parent"
@@ -42,20 +53,67 @@
         android:id="@+id/weeklyTestBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NCERT Books (Delete)"
+        android:text="Weekly Tests"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:gravity="center"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:background="@color/black"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:cardCornerRadius="8dp"
+           android:layout_margin="4dp">
 
+            <TextView
+                android:id="@+id/dailyVocabTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Daily Vocabulary"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"/>
 
+        </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:cardCornerRadius="8dp"
+            android:layout_margin="4dp">
 
+            <TextView
+                android:id="@+id/monthlyVocabTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Monthly Vocabulary"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"/>
+        </androidx.cardview.widget.CardView>
 
+    </LinearLayout>
 
-
-
+    <Button
+        android:id="@+id/topHeadlinesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Top Headlines"/>
 
 </LinearLayout>
