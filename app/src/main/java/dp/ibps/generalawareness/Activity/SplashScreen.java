@@ -32,6 +32,7 @@ public class SplashScreen extends AppCompatActivity {
     private DocumentReference docRef;
     private String deviceID_DB = "";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final String TAG = "SplashScreen";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +49,13 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 AppConstant.ncertHindiModels = Room.databaseBuilder(SplashScreen.this, MainDAOClass.class, "hindiNCERT")
-                       .build().mainRoomDB().getHindiNCERTDetails();
+                        .build().mainRoomDB().getHindiNCERTDetails();
                 AppConstant.ncertEnglishModels = Room.databaseBuilder(SplashScreen.this, MainDAOClass.class, "englishNCERT")
-                       .build().mainRoomDB().getEnglishNCERTDetails();
+                        .build().mainRoomDB().getEnglishNCERTDetails();
+
+                Log.d(TAG, "run: Splash Screen getting size of the list Hindi " +
+                        AppConstant.ncertHindiModels.size() +
+                        " List size Englih : " + AppConstant.ncertEnglishModels.size());
             }
         }).start();
 
