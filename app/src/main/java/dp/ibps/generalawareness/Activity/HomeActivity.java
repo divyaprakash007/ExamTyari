@@ -79,6 +79,13 @@ public class HomeActivity extends AppCompatActivity {
         initialise();
         lastUsingDate();
 
+        if(getIntent()!=null && getIntent().hasExtra("key1")){
+            for (String key:getIntent().getExtras().keySet()){
+                Log.d(TAG, "onCreate: Key : " + key + " Data : " + getIntent().getExtras().getString(key));
+                Toast.makeText(this, "onCreate: Key : " + key + " Data : " + getIntent().getExtras().getString(key), Toast.LENGTH_SHORT).show();
+            }
+        }
+
         drawerLayout = findViewById(R.id.drawer);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
