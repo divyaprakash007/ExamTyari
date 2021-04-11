@@ -40,7 +40,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private static final String TAG = "UpdateProfileActivity";
     private Button updateProfileBtn;
     private TextInputEditText userNameEt, userMobileEt, userPinEt;
-    private boolean isBackPressed = false;
+    private boolean isBackPressed = true;
     /*
     User Name
     User Mobile number
@@ -150,6 +150,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         if (isBackPressed) {
             Toast.makeText(this, "Please update profile.", Toast.LENGTH_LONG).show();
         }
+        isBackPressed = false;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
