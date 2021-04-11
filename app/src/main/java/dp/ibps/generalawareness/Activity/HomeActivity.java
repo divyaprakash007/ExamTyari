@@ -30,13 +30,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,12 +83,17 @@ public class HomeActivity extends AppCompatActivity {
         initialise();
         lastUsingDate();
 
-        if(getIntent()!=null && getIntent().hasExtra("key1")){
-            for (String key:getIntent().getExtras().keySet()){
-                Log.d(TAG, "onCreate: Key : " + key + " Data : " + getIntent().getExtras().getString(key));
-                Toast.makeText(this, "onCreate: Key : " + key + " Data : " + getIntent().getExtras().getString(key), Toast.LENGTH_SHORT).show();
-            }
-        }
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: insstance Id : " + task.getResult().getToken());
+                        } else {
+                            Log.d(TAG, "onComplete: insstance Id : " + task.getException().getMessage());
+                        }
+                    }
+                });
 
         drawerLayout = findViewById(R.id.drawer);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
