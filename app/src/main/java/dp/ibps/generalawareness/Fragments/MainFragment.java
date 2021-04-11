@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 import dp.ibps.generalawareness.Activity.NCERTActivity;
 import dp.ibps.generalawareness.Activity.NotificationsActivity;
+import dp.ibps.generalawareness.Activity.VacabularyActivity;
 import dp.ibps.generalawareness.Activity.WebViewActivity;
 import dp.ibps.generalawareness.AppUtils.AppConstant;
 import dp.ibps.generalawareness.AppUtils.AppUtils;
@@ -111,7 +112,8 @@ public class MainFragment extends Fragment {
         monthlyVocabTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 28-03-2021 get monthly vocabulary db and save it to local db
+                Intent intent = new Intent(getActivity(), VacabularyActivity.class);
+                // TODO: 28-03-2021 start intent to target monthly and daily vocabulary
             }
         });
 
