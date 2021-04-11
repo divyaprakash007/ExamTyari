@@ -40,7 +40,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private static final String TAG = "UpdateProfileActivity";
     private Button updateProfileBtn;
     private TextInputEditText userNameEt, userMobileEt, userPinEt;
-
+    private boolean isBackPressed = false;
     /*
     User Name
     User Mobile number
@@ -52,6 +52,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_update_profile);
         getSupportActionBar().setTitle("Update Profile");
         initialise();
@@ -82,7 +84,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(UpdateProfileActivity.this, "Server Error!", Toast.LENGTH_LONG).show();
-                AppUtils.sendErrorMessage(UpdateProfileActivity.this,AppUtils.getTodayDate(),""+e.getMessage(),"","UpdateProfileActivity");
+                AppUtils.sendErrorMessage(UpdateProfileActivity.this, AppUtils.getTodayDate(), "" + e.getMessage(), "", "UpdateProfileActivity");
                 startActivity(new Intent(UpdateProfileActivity.this, HomeActivity.class));
                 finish();
             }
@@ -145,6 +147,15 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "Please update profile.", Toast.LENGTH_LONG).show();
+        if (isBackPressed) {
+            Toast.makeText(this, "Please update profile.", Toast.LENGTH_LONG).show();
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isBackPressed = true;
+            }
+        }, 1000);
+
     }
 }

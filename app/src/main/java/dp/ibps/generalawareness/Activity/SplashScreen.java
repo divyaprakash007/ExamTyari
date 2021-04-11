@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,8 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         new Thread(new Runnable() {
             @Override
@@ -69,7 +73,7 @@ public class SplashScreen extends AppCompatActivity {
 
         try {
             taglineTV.setText(taglines[AppUtils.getRandomNumber(0, taglines.length - 1)]);
-            // TODO: 25-03-2021 compare the date of birth with today date to show message
+            // TODO: next version 25-03-2021 compare the date of birth with today date to show message
             if (!AppPrefs.getDOB(this).equals("")) {
                 if (AppPrefs.getDOB(this).equals(AppUtils.getTodayDate())) {
                     taglineTV.setText(AppPrefs.getUserName(this) + ",\nWish you a very Happy birthday.\nGod Bless You.");

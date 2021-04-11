@@ -11,16 +11,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExamTyari"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.VacabularyActivity"></activity>
-        <activity android:name=".Activity.NCERTActivity" />
-        <activity android:name=".Activity.MockTestResultActivity" />
-        <activity android:name=".Activity.MockTestActivity" />
-        <activity android:name=".Activity.FeedBackActivity" />
+        <activity android:name=".Activity.VacabularyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.NCERTActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.MockTestResultActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.MockTestActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.FeedBackActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity.NoInternetConnection"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <activity android:name=".Activity.NotificationsActivity" />
-        <activity android:name=".Activity.SettingsActivity" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.NotificationsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.SettingsActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activity.LoginActivity"
             android:screenOrientation="portrait"
