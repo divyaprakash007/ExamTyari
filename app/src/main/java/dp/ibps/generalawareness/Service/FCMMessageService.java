@@ -13,12 +13,12 @@ public class FCMMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        if (remoteMessage.getNoKtification() != null){
-             String title = remoteMessage.getNotification().getTitle();
-             String body = remoteMessage.getNotification().getBody();
-
-//            Notification notification = new NotificationCompat().Builder(this, )
-        }
+//        if (remoteMessage.getNoKtification() != null){
+//             String title = remoteMessage.getNotification().getTitle();
+//             String body = remoteMessage.getNotification().getBody();
+//
+////            Notification notification = new NotificationCompat().Builder(this, )
+//        }
     }
 
     @Override
