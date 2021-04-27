@@ -7,8 +7,8 @@
         app:showAsAction="always"/>
     <item android:id="@+id/check_update"
         android:title="Check Updates" />
-    <item android:id="@+id/settings"
-        android:title="Settings" />
+<!--    <item android:id="@+id/settings"-->
+<!--        android:title="Settings" />-->
 
 
 </menu>

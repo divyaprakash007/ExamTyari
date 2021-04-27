@@ -274,9 +274,9 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.check_update:
                     AppUtils.checkVersionUpdate(HomeActivity.this, true);
                     break;
-                case R.id.settings:
-                    startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
-                    break;
+//                case R.id.settings:
+//                    startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+//                    break;
             }
 
             new Handler().postDelayed(new Runnable() {
