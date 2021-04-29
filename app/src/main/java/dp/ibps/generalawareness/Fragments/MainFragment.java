@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import dp.ibps.generalawareness.Activity.MonthlyTestActivity;
 import dp.ibps.generalawareness.Activity.NCERTActivity;
 import dp.ibps.generalawareness.Activity.NotificationsActivity;
 import dp.ibps.generalawareness.Activity.VacabularyActivity;
@@ -67,13 +68,14 @@ public class MainFragment extends Fragment {
     private Button ncertBooksBtn;
     private Button weeklyTestBtn;
     private TextView dailyVocabTV, monthlyVocabTV;
-    private Button topHeadlinesButton;
+    private Button topHeadlinesButton,monthlyMockTest;
     private AdView adView1;
     private ProgressDialog dialog;
     private FirebaseFirestore db;
     private static final String TAG = "MainFragment";
 
     private void initialise(View view) {
+        db = FirebaseFirestore.getInstance();
         dialog = new ProgressDialog(getContext());
         newsPapersRV = view.findViewById(R.id.newsPapersRV);
         ncertBooksBtn = view.findViewById(R.id.ncertBooksBtn);
@@ -82,6 +84,7 @@ public class MainFragment extends Fragment {
         dailyVocabTV = view.findViewById(R.id.dailyVocabTV);
         topHeadlinesButton = view.findViewById(R.id.topHeadlinesButton);
         adView1 = view.findViewById(R.id.adView);
+        monthlyMockTest = view.findViewById(R.id.monthlyMockTest);
 
         MobileAds.initialize(getContext());
         AdView adView = new AdView(getContext());
@@ -93,13 +96,22 @@ public class MainFragment extends Fragment {
             }
         });
 
+        monthlyMockTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 29-04-2021 if current month is not equal to last test month then fetch and update room db
+                // TODO: 29-04-2021 else fetch data from room db and show the list.
+                startActivity(new Intent(getActivity(), MonthlyTestActivity.class));
+            }
+        });
+
         AdRequest adRequest = new AdRequest.Builder().build();
         adView1.loadAd(adRequest);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         newsPapersRV.setLayoutManager(linearLayoutManager);
         newsPapersRV.setAdapter(new NewsPapersAdapter());
-        db = FirebaseFirestore.getInstance();
+
         topHeadlinesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

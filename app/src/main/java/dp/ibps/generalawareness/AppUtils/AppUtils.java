@@ -56,6 +56,12 @@ public class AppUtils {
         return dateFormat.format(date);
     }
 
+    public static String getCurrentMonth() {
+        DateFormat dateFormat = new SimpleDateFormat("mm-yy");
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
     public static void checkVersionUpdate(Context context, boolean progressStatus) {
         ProgressDialog dialogStatus = new ProgressDialog(context);
         if (progressStatus) {
